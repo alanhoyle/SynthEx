@@ -9,3 +9,4 @@ Description: SynthEx is a comprehensive suite of tools for CNA detection and tum
 License: GPL (>=2)
 LinkingTo: mclust, flsa, foreach, DNAcopy, ggplot2, gridExtra, inline, Rcpp
 Imports: mclust, flsa, foreach, DNAcopy, ggplot2, gridExtra, inline, Rcpp
+Suggests: optparse

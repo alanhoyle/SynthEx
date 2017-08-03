@@ -38,7 +38,7 @@ synthetic_nearsamples_WGS_calratio <- function(tumor, counts, bin.size = 100000,
         stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of", bin.size, "; Please use createCentromereBins()
                     to generate the required file or consider to use another bin size."))
       } else {
-        data(CentromereAnnotations)
+        # data(CentromereAnnotations)
         ss <- paste0("centromere <- CentromereAnnotations$bin", bin.size)
         eval(parse(text=ss))
       }

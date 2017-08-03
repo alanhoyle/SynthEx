@@ -64,7 +64,7 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
         stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of", bin.size, "; Please use createCentromereBins()
                     to generate the required file or consider to use another bin size."))
       } else {
-        data(CentromereAnnotations)
+        # data(CentromereAnnotations)
         ss <- paste0("centromere <- CentromereAnnotations$bin", bin.size)
         eval(parse(text=ss))
       }
@@ -84,7 +84,7 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
       stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of", bin.size, "; Please use createTargetBins()
                   to generate the required file or consider to use another bin size."))
     } else {
-      data(TargetAnnotations)
+      # data(TargetAnnotations)
       ss <- paste0("target <- TargetAnnotations$bin", bin.size)
       eval(parse(text=ss))
     }

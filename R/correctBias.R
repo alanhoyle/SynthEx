@@ -27,7 +27,7 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
       if(!bin.size %in% c(10000, 25000, 50000, 100000)){
         stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of", bin.size, "; Please use createCentromereBins() to generate the required file or consider to use another bin size."))
       } else {
-        data(CentromereAnnotations)
+        # data(CentromereAnnotations)
         ss <- paste0("centromere <- CentromereAnnotations$bin", bin.size)
         eval(parse(text=ss))
       }
@@ -47,7 +47,7 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
       stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of", bin.size, "; Please use createTargetBins()
                   to generate the required file or consider to use another bin size."))
     } else {
-      data(TargetAnnotations)
+      # data(TargetAnnotations)
       ss <- paste0("target <- TargetAnnotations$bin", bin.size)
       eval(parse(text=ss))
     }

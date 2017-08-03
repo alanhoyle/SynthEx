@@ -1,7 +1,7 @@
 createCentromereBins <- function(cytoband = NULL, bin.size = 100000, write = FALSE, result.dir = NULL){
   options(scipen = 50)
   if(is.null(cytoband)){
-    data(CentromereAnnotations)
+    # data(CentromereAnnotations)
     cytoband <- CentromereAnnotations$cytoband
   }
 
