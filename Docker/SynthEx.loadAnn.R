@@ -4,16 +4,16 @@ suppressPackageStartupMessages(library(optparse))
 
 option_list <- list (
                      make_option (c("-t","--tumor"),
-                                  default="/input/tumor.bed",
+                                  default="tumor.bed",
                                   help="The Tumor BED counts file [default %default]"),
 
                      make_option (c("-n","--normal"),
-                                  default="/input/normal.bed",
+                                  default="normal.bed",
                                   help="The normal BED counts file [default %default]"),
 
                      make_option (c("-s","--samplename"),
                                   default="SAMPLE",
-                                  help="the sample name[default %default]"),
+                                  help="the sample name [default %default]"),
 
                      make_option (c("-G","--genotype"),
                                   default= NULL,
@@ -74,7 +74,7 @@ if (opt$annotation == "") {
 } else if (file.exists (opt$annotation)) {
     read (opt$annotation)
 } else {
-  message("Can't find target annotations for ",opt$annotation,".")
+  stop("Can't find target annotations for ",opt$annotation,".")
 
 }
 
@@ -83,32 +83,71 @@ message("Using Target ",TargetAnnotations$genome,"/",TargetAnnotations$Descripti
 if (opt$centromeres == "") {
 
   data ("CentromereAnnotations")
-} else {
-
+} else  if (opt$centromeres %in% datalist) {
+  data(opt$centromeres)
+} else if (file.exists (opt$centromeres)) {
   read (opt$centromeres)
+} else {
+  stop("Can't find centromeres for ",opt$centromeres,".")
+
 }
 
+# message("Using centromeres ",opt$centromeres,".")
+
 working.dir <- opt$tmpdir
+
+dir.create(working.dir,showWarnings = FALSE)
 result.dir <- opt$outdir
-normal.file <- opt$normal
+dir.create(working.dir,showWarnings = FALSE)
+
+
+
 
 tumor.file <- opt$tumor
+
+normal.file <- opt$normal
+
 sample.name <- opt$samplename
 genotype.file <- opt$genotype
 numnormals <- opt$numnormals
 
 debug <- opt$debug
 if (debug) {
-    cat (paste("bin.size:", bin.size,"\n","tumor.file:",tumor.file,"\nnormal.file:",normal.file,"\ngenotype.file: ",genotype.file,"\n"))
+    message ("bin.size:", bin.size,"\n","tumor.file:",tumor.file,"\nnormal.file:",normal.file,"\ngenotype.file: ",genotype.file,"\n")
 }
 
-if (debug) {cat ("Generating target Bins\n")}
-targetAnnotateBins <- createTargetBins(TargetAnnotations$Target,bin.size=bin.size)
-if (debug) {cat ("Generating centromere Bins\n")}
-centromereBins <- createCentromereBins(bin.size=bin.size)
+
+if(!file.exists (tumor.file)) {
+  stop("Can't find tumor file: ",tumor.file)
+}
+
+if(!file.exists (normal.file)) {
+  stop("Can't find normal file: ",normal.file)
+}
 
 
-cat ("------Running SynthExPipeline------\n")
+#ss <- paste0("centromere <- CentromereAnnotations$bin", bin.size)
+#eval(parse(text=ss))
+
+
+if (is.null(eval (parse(text=paste0("TargetAnnotations$bin", bin.size))))) {
+  message ("Generating target bins for size ",bin.size,".")
+  targetAnnotateBins <- createTargetBins(TargetAnnotations$Target,bin.size=bin.size)
+
+} else if (debug) {
+    message ("Target bins exist for bin size of ",bin.size,".")
+}
+
+if (is.null(eval (parse(text=paste0("CentromereAnnotations$bin", bin.size))))) {
+  message ("Generating centromere bins for size ",bin.size,".")
+  centromereBins <- createCentromereBins(bin.size=bin.size)
+} else if (debug) {
+  message ("Centromere bins exist for bin size of ",bin.size,".")
+}
+
+
+
+message ("------Running SynthExPipeline------")
 Segfrompipe <- SynthExPipeline (tumor.file,normal.file,
                                 bin.size=bin.size,
                                 intersectBed.dir,
@@ -118,5 +157,5 @@ Segfrompipe <- SynthExPipeline (tumor.file,normal.file,
                                 verbose=debug,
                                 K=numnormals)
 
-cat ("------Finished running SynthExPipeline------\n")
+message ("------Finished running SynthExPipeline------\n")
 

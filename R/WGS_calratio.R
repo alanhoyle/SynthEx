@@ -24,7 +24,7 @@ WGS_calratio <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
   if(rm.centromere == TRUE) {
     if(is.null(centromereBins)){
       if(!bin.size %in% c(10000, 25000, 50000, 100000)){
-        stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of", bin.size, "; Please use createCentromereBins() to generate the required file or consider to use another bin size."))
+        stop(paste0("SynthEx doesn't have centromere bins pre-calculated for bin size of ", bin.size, "; Please use createCentromereBins() to generate the required file or consider another bin size."))
       } else {
         # data(CentromereAnnotations)
         ss <- paste0("centromere <- CentromereAnnotations$bin", bin.size)
