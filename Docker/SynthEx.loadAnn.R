@@ -64,15 +64,17 @@ bin.size = opt$bin
 
 intersectBed.dir <- system("which intersectBed", intern=TRUE)
 
+if (is.null(intersectBed.dir)) stop ("Can't find intersectBed")
+
 datalist = data()$results
 
 if (opt$annotation == "") {
 
   data ("TargetAnnotations")
 } else if (opt$annotation %in% datalist) {
-    data(opt$annotation)
+    data(list=opt$annotation)
 } else if (file.exists (opt$annotation)) {
-    read (opt$annotation)
+    load (file=opt$annotation)
 } else {
   stop("Can't find target annotations for ",opt$annotation,".")
 
@@ -84,9 +86,9 @@ if (opt$centromeres == "") {
 
   data ("CentromereAnnotations")
 } else  if (opt$centromeres %in% datalist) {
-  data(opt$centromeres)
+  data(list=opt$centromeres)
 } else if (file.exists (opt$centromeres)) {
-  read (opt$centromeres)
+  load (file=opt$centromeres)
 } else {
   stop("Can't find centromeres for ",opt$centromeres,".")
 
