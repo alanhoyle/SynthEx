@@ -1,3 +1,7 @@
 .DS_Store
+*BaselinePlot.jpg
+*DensityPlot.pdf
+*Ratio.bed
 .Rhistory
 .Rproj.user
+.gitignore
