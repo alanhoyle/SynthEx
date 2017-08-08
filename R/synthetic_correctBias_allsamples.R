@@ -153,7 +153,7 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
 
   if(plot == TRUE) {
     if(abs(target.max) > 1){
-      print("Caution: The ratios between bins at the boundaries of target and non-target regions deviate a lot from zero, indicating the ratios from the target and non-target regions are very different")
+      message ("Caution: The ratios between bins at the boundaries of target and non-target regions deviate a lot from zero, indicating the ratios from the target and non-target regions are very different")
       if(saveplot == TRUE){
         if(!is.null(prefix)){
           pdf(paste0(result.dir, "/",  prefix, "-DensityPlot--CautionSample.pdf"))

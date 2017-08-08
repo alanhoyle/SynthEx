@@ -21,7 +21,7 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
     ratioNormalized <- normalization(ratioCorrectedBias, bedTools.dir = bedTools.dir, genotype.file = genotype.file, vcf = vcf,
           working.dir = working.dir, result.dir = result.dir, cutoff = reads.threshold, plot = plot, saveplot = saveplot,
           prefix = prefix,  adjust.cutoff = adjust.cutoff, seg.count = seg.count)
-    if(verbose == TRUE) print("Normalization finished.")
+    if(verbose == TRUE) message("Normalization finished.")
     ratiotoSeg <- ratioNormalized
   } else {
     ratiotoSeg <- ratioCorrectedBias
@@ -29,18 +29,20 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
 
   Seg <- createSegments(ratiotoSeg, segmentMethod)
 
-  if(verbose == TRUE) print("Segmentation finished.")
+  if(verbose == TRUE) message("Segmentation finished.")
 
   Segments <- singleCNreport(Seg, report = report, result.dir = result.dir, saveplot = saveplot,
            prefix = prefix, plotNormalized = plotNormalized, WGD = WGD, pos.prop.threhold = pos.prop.threhold,
            pos.log2ratio.threhold = pos.log2ratio.threhold)
+
+  if(verbose == TRUE) message("singleCNreport finished.")
 
   if(!is.null(genotype.file)){
     PurityCorrected <- purityEstimate(Segments, working.dir = working.dir, result.dir = result.dir, bedTools.dir = bedTools.dir,
      prefix = prefix, report = report, prop.threshold = prop.threshold, delta = delta, maf.control = maf.control,
      tau = tau, sigma = sigma, len.threshold.K = len.threshold.K, group.length.threshold = group.length.threshold,
      gain.threshold = gain.threshold, loss.threshold = loss.threshold, Normalized = plotNormalized)
-    if(verbose == TRUE) print("Purity estimation finished.")
+    if(verbose == TRUE) message("Purity estimation finished.")
     genomeplot <- chromosomeView(PurityCorrected, prefix = prefix, result.dir = result.dir, saveplot = saveplot, lwd = lwd)
     Segments <- PurityCorrected
   }
