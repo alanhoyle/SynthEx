@@ -12,10 +12,10 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
 
   ratioCorrectedBias <- SynthExcorrectBias(tumor, normal, bin.size = bin.size, rm.centromere = rm.centromere,
              targetAnnotateBins = targetAnnotateBins, saveplot = saveplot, centromereBins = centromereBins,
-             chrX = chrX, plot = plot, result.dir = result.dir, working.dir = working.dir, K =K, 
+             chrX = chrX, plot = plot, result.dir = result.dir, working.dir = working.dir, K =K,
              prefix = prefix, reads.threshold = reads.threshold)
 
-  if(verbose == TRUE) print("Bias correction finished.")
+  if(verbose == TRUE) message("Bias correction finished.")
 
   if(!is.null(genotype.file)){
     ratioNormalized <- normalization(ratioCorrectedBias, bedTools.dir = bedTools.dir, genotype.file = genotype.file, vcf = vcf,
@@ -45,10 +45,9 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
     Segments <- PurityCorrected
   }
 
-  if(verbose == TRUE) print(paste0("Report can be found at: ", result.dir, " ."))
+  if(verbose == TRUE) message("Report can be found at: ", result.dir,)
 
   return(Segments)
 
 }
-
 
