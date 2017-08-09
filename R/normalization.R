@@ -12,24 +12,24 @@ normalization <- function(ratioCorrectedBias, bedTools.dir, genotype.file, vcf =
     stop("The input of normalization() must be the output from correctBias() or calratioWGS().")
   }
 
-  write.table(ratioCorrectedBias$Ratio, paste0(working.dir, "/Ratio.bed"),
+  write.table(ratioCorrectedBias$Ratio, file.path (working.dir, "Ratio.bed"),
               col.names = F, row.names = F, sep = "\t", quote = F)
 
   if(vcf==TRUE) {
     ######### calculate MAF from VCF file #########
-    ff <- paste0("cat ", genotype.file, " | python ", freebayes_to_bed, " ", cutoff, " 0.05  > ", working.dir, "/tumor.MAF.highcut.bed")
+    ff <- paste0("cat ", genotype.file, " | python ", freebayes_to_bed, " ", cutoff, " 0.05  > ", file.path (working.dir, "tumor.MAF.highcut.bed"))
     system(ff)
     ######## Creates the intersect(using intersectBed) of MAF + adjusted bin ratios
-    ff <- paste0(bedTools.dir, " -a ", working.dir, "/tumor.MAF.highcut.bed -b ", paste0(working.dir, "/Ratio.bed"),
-               " -wa -wb > ",  working.dir, "/tumor.MAF.ratio.bed")
+    ff <- paste0(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed")," -b ", file.path (working.dir, "Ratio.bed"),
+               " -wa -wb > ",  file.path (working.dir, "tumor.MAF.ratio.bed"))
     system(ff)
   } else {
-    ff <- paste0(bedTools.dir, " -a ", genotype.file, " -b ", paste0(working.dir, "/Ratio.bed"),
-                 " -wa -wb > ",  working.dir, "/tumor.MAF.ratio.bed")
+    ff <- paste0(bedTools.dir, " -a ", genotype.file, " -b ", file.path (working.dir, "Ratio.bed"),
+                 " -wa -wb > ",  file.path (working.dir, "tumor.MAF.ratio.bed"))
     system(ff)
   }
   ##########
-  data <- read.delim(paste0(working.dir, "/tumor.MAF.ratio.bed"), header = F)
+  data <- read.delim(file.path (working.dir, "tumor.MAF.ratio.bed"), header = F)
   if(substr(data[1, 1], 1, 3) == "chr") {
     data[, 1] <- gsub("chr", "", data[, 1])
   }
@@ -103,9 +103,9 @@ normalization <- function(ratioCorrectedBias, bedTools.dir, genotype.file, vcf =
     #scatterplot of x and y variables
     if(saveplot == TRUE){
       if(!is.null(prefix)){
-        jpeg(filename = paste0(result.dir, "/", prefix, "-BaselinePlot.jpg"), width = 1200, height = 600, quality=100)
+        jpeg(filename = file.path (result.dir, paste0( prefix, "-BaselinePlot.jpg")), width = 1200, height = 600, quality=100)
       } else {
-        jpeg(filename = paste0(result.dir, "/BaselinePlot.jpg"), width = 1200, height = 600, quality=100)
+        jpeg(filename = file.path (result.dir, "BaselinePlot.jpg"), width = 1200, height = 600, quality=100)
       }
     }
     scatter <- ggplot(AF.ratio, aes(median.AF, median.ratio)) +  geom_point() +  theme(legend.position = c(1, 1), legend.justification = c(1, 1)) + xlab("median MAF") + ylab("Tumor/Normal Ratio")

@@ -33,7 +33,7 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
 
   Segments <- singleCNreport(Seg, report = report, result.dir = result.dir, saveplot = saveplot,
            prefix = prefix, plotNormalized = plotNormalized, WGD = WGD, pos.prop.threhold = pos.prop.threhold,
-           pos.log2ratio.threhold = pos.log2ratio.threhold)
+           pos.log2ratio.threhold = pos.log2ratio.threhold,verbose=verbose)
 
   if(verbose == TRUE) message("singleCNreport finished.")
 

@@ -4,8 +4,9 @@ calratioWGS <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE, 
   options(scipen = 50)
   if(is.null(result.dir)) result.dir <- "result"
   if(is.null(working.dir)) working.dir <- "working"
-  system(paste0("mkdir ", result.dir))
-  system(paste0("mkdir ", working.dir))
+
+  dir.create(working.dir,showWarnings = FALSE)
+  dir.create(result.dir,showWarnings = FALSE)
 
   if(class(tumor) == "character"){
     tumor <- read.delim(tumor, header = F, as.is = T)

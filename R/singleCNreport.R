@@ -1,9 +1,10 @@
 singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot = FALSE,
                            prefix = NULL,  plotNormalized = TRUE,
-                           WGD = 1.35, pos.prop.threhold = 0.6, pos.log2ratio.threhold = 0.75){
-
+                           WGD = 1.35, pos.prop.threhold = 0.6, pos.log2ratio.threhold = 0.75,
+                           verbose=FALSE){
+  if (verbose == TRUE) message("singleCNreport start")
   options(scipen = 50)
-  if(is.null(result.dir)) result.dir <- paste0(getwd(), "/result")
+  if(is.null(result.dir)) result.dir <- file.path (getwd(), "result")
   segmentMethod <- Segment$segmentMethod
 
   if(plotNormalized == TRUE & !is.null(Segment$segmentNormalized)){
@@ -15,25 +16,29 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
     data <- Segment$Ratio[, c("chr", "start", "end", "ratio")]
     data$log2ratio <- round(log2(data[, "ratio"] + 0.0001), 4)
   }
+  if (verbose == TRUE) message("CallWholeGenomeDoubling...")
 
   Segment$WholeGenomeDoubling <- CallWholeGenomeDoubling(segments, WGD = WGD, pos.prop.threhold = pos.prop.threhold, pos.log2ratio.threhold = pos.log2ratio.threhold)$WholeGenomeDoubling
-
   bin.size <- data[1, "end"] - data[1, "start"] + 1
   maxlength <- tapply(segments$end, segments$chr, max)
   xmax <- sum(maxlength/bin.size) + 400
 
   if(saveplot == TRUE){
     if(is.null(prefix)){
-      jpeg(filename = paste0(result.dir, "/Segmentation_",  segmentMethod, "_", bin.size, ".jpg"), width = 2000, height = 480, quality=100)
+      jpeg(filename = file.path (result.dir, paste0 ("Segmentation_", segmentMethod, "_", bin.size, ".jpg")), width = 2000, height = 480, quality=100)
     } else {
-      jpeg(filename = paste0(result.dir, "/", prefix, "-Segmentation_",  segmentMethod, "_", bin.size, ".jpg"), width = 2000, height = 480, quality=100)
+      jpeg(filename = file.path (result.dir, paste0( prefix, "-Segmentation_",  segmentMethod, "_", bin.size, ".jpg")), width = 2000, height = 480, quality=100)
     }
   } else {
     dev.new(width = 20, height = 4.8)
   }
+  if (verbose == TRUE) message("plot...")
+
   plot(0, 0, type = "n", ylim = c(-2, 3), xlim = c(0, xmax), axes = F, xlab = "", ylab = "", main = prefix, cex.lab = 2, cex.axis = 2)
   axis(2)
   order <- 0
+  if (verbose == TRUE) message("for loop....")
+
   for(l in 1:length(unique(segments$chr))){
     sub <- segments[segments$chr == l, ]
     sub.data <- data[data$chr == l, ]
@@ -49,6 +54,8 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
       text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, l, font = 2)
     }
   }
+  if (verbose == TRUE) message("for loop done.")
+
   if(Segment$WholeGenomeDoubling == TRUE){
     abline(h = log2(1/Segment$Adjust), col = "brown", lty = "dashed", lwd = 2)
     text(xmax - 2000, -2, "Whole Genome Doubling", cex = 2, col = "brown")
@@ -70,24 +77,26 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
     segments <- as.data.frame(segments)
     segments <- segments[segments$chr != "Y", ]
 
+    if (verbose == TRUE) message("segments is set...")
+
     if(is.null(prefix)){
       dataSample <- segments
       colnames(dataSample) <-c("chr", "start", "end", "seg.mean")
       if(!is.null(prefix)){
-        write.table(dataSample, paste0(result.dir, "/", prefix, "-Segment-", segmentMethod, "-", bin.size, ".txt"),
+        write.table(dataSample, file.path (result.dir, paste0(prefix, "-Segment-", segmentMethod, "-", bin.size, ".txt")),
                     col.names = T, row.names = F, sep = "\t", quote = F)
       } else {
-        write.table(dataSample, paste0(result.dir, "/Segment-", segmentMethod, "-", bin.size, ".txt"),
+        write.table(dataSample, file.path (result.dir, paste0("Segment-", segmentMethod, "-", bin.size, ".txt")),
                     col.names = T, row.names = F, sep = "\t", quote = F)
       }
     } else {
       dataSample <- cbind(prefix, segments)
       colnames(dataSample) <-c("sample", "chr", "start", "end", "seg.mean")
       if(!is.null(prefix)){
-        write.table(dataSample, paste0(result.dir, "/", prefix, "-Segment-", segmentMethod, "-", bin.size, ".txt"),
+        write.table(dataSample, file.path (result.dir, paste0(prefix, "-Segment-", segmentMethod, "-", bin.size, ".txt")),
                   col.names = T, row.names = F, sep = "\t", quote = F)
       } else {
-        write.table(dataSample, paste0(result.dir, "/Segment-", segmentMethod, "-", bin.size, ".txt"),
+        write.table(dataSample, file.path (result.dir, paste0("Segment-", segmentMethod, "-", bin.size, ".txt")),
                     col.names = T, row.names = F, sep = "\t", quote = F)
       }
     }

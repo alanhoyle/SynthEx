@@ -52,9 +52,9 @@ synthetic_nearsamples_WGS_calratio <- function(tumor, counts, bin.size = 100000,
 
 
   if(!is.null(prefix)){
-    write.table(ratio.res, paste0(result.dir, "/", prefix, "_Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.res, file.path (result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(ratio.res, paste0(result.dir, "/Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.res, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   if(chrX == FALSE){

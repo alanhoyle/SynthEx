@@ -41,22 +41,24 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
   }
 
 
-  write.table(ratio.res, paste0(result.dir, "/adjusted.ratio.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
+  write.table(ratio.res, file.path (result.dir, "adjusted.ratio.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
 
 
   ######### calculate MAF from VCF file #########
-  ff <- paste0("cat ", genotype.file, " | python ", freebayes_to_bed, " ", cutoff, " 0.05  > ", working.dir, "/tumor.MAF.highcut.bed")
+  ff <- paste0("cat ", genotype.file, " | python ", freebayes_to_bed, " ", cutoff, " 0.05  > ",
+               file.path (working.dir, "tumor.MAF.highcut.bed"))
   system(ff)
 
   #Creates the intersect(using intersectBed) of MAF + adjusted bin ratios
-  ff <- paste0(bedTools.dir, " -a ", working.dir, "/tumor.MAF.highcut.bed -b ",
-               paste0(working.dir, "/adjusted.ratio.bed"), " -wa -wb > ",  working.dir, "/tumor.MAF.ratio.bed")
+  ff <- paste0(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed"),
+               " -b ", file.path (working.dir, "adjusted.ratio.bed"),
+               " -wa -wb > ",  file.path (working.dir, "tumor.MAF.ratio.bed"))
   system(ff)
 
 
   ##########
   ##########
-  data <- read.delim(paste0(working.dir, "/tumor.MAF.ratio.bed"), header = F)
+  data <- read.delim(file.path (working.dir, "tumor.MAF.ratio.bed"), header = F)
   if(substr(data[1, 1], 1, 3) == "chr") {
     data[, 1] <- gsub("chr", "", data[, 1])
   }
@@ -130,9 +132,9 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
     #scatterplot of x and y variables
     if(saveplot == TRUE){
       if(!is.null(prefix)){
-        pdf(paste0(result.dir, "/", prefix, "-BaselinePlot.pdf"), width = 12, height = 6)
+        pdf(file.path (result.dir, paste0(prefix, "-BaselinePlot.pdf")), width = 12, height = 6)
       } else {
-        pdf(paste0(result.dir, "/BaselinePlot.pdf"), width = 12, height = 6)
+        pdf(file.path (result.dir, "BaselinePlot.pdf"), width = 12, height = 6)
       }
     }
     scatter <- ggplot(AF.ratio, aes(median.AF, median.ratio)) +  geom_point() +  theme(legend.position = c(1, 1), legend.justification = c(1, 1)) + xlab("median MAF") + ylab("Tumor/Normal Ratio")

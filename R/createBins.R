@@ -16,7 +16,7 @@ createBins <- function(binsize = 100000, chromLength = NULL, write = TRUE, resul
     allintervals <- rbind(allintervals, res)
   }
   if(write == TRUE){
-    write.table(allintervals, paste0(result.dir, "/", prefix, "_", binsize, ".bed"), col.names = F, row.names = F, quote = F, sep = "\t")
+    write.table(allintervals, file.path (result.dir, paste0( prefix, "_", binsize, ".bed")), col.names = F, row.names = F, quote = F, sep = "\t")
   }
   return(allintervals)
 }

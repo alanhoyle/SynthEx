@@ -156,9 +156,9 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
       message ("Caution: The ratios between bins at the boundaries of target and non-target regions deviate a lot from zero, indicating the ratios from the target and non-target regions are very different")
       if(saveplot == TRUE){
         if(!is.null(prefix)){
-          pdf(paste0(result.dir, "/",  prefix, "-DensityPlot--CautionSample.pdf"))
+          pdf(file.path (result.dir, paste0( prefix, "-DensityPlot--CautionSample.pdf")))
         } else {
-          pdf(paste0(result.dir, "/DensityPlot--CautionSample.pdf"))
+          pdf(file.path (result.dir, "DensityPlot--CautionSample.pdf"))
         }
       }
       plot(d1, col = "red", xlim = c(-3, 3), ylim = c(0, max(d1$y, d2$y, d3$y)), main = prefix, xlab = "Distance", lwd = 2)
@@ -171,9 +171,9 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
     } else{
       if(saveplot == TRUE){
         if(!is.null(prefix)){
-          pdf(paste0(result.dir, "/",  prefix, "-DensityPlot.pdf"))
+          pdf(file.path (result.dir, paste0(prefix, "-DensityPlot.pdf")))
         } else {
-          pdf(paste0(result.dir, "/DensityPlot.pdf"))
+          pdf(file.path (result.dir, "DensityPlot.pdf"))
         }
       }
       plot(d1, col = "red", xlim = c(-3, 3), ylim = c(0, max(d1$y, d2$y, d3$y)), main = prefix, xlab = "Successive Difference", lwd = 2)
@@ -195,9 +195,9 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
   ratio.res[, "ratio"] <- ratio
 
   if(!is.null(prefix)){
-    write.table(ratio.res, paste0(result.dir, "/", prefix, "_Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.res, file.path (result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(ratio.res, paste0(result.dir, "/Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.res, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   if(chrX == FALSE){

@@ -100,13 +100,15 @@ purityEstimate <- function(Segment, working.dir = NULL, result.dir = NULL,
     group.mean <- tapply(subsegRes[, 4], a.sample.cluster, mean)
     group.length <- tapply(subsegRes[, 4], a.sample.cluster, length)
     clustering <- data.frame(subsegRes, a.sample.cluster)
-    write.table(clustering, paste0(working.dir, "/clustering.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
+    write.table(clustering, file.path(working.dir, "clustering.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
 
-    ff <- paste0(bedTools.dir, " -a ", working.dir, "/tumor.MAF.highcut.bed", " -b ", working.dir, "/clustering.bed -wa -wb > ",
-               working.dir, "/tumor.MAF_clustering.bed")
+    ff <- paste0(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed"),
+                 " -b ", file.path (working.dir, "clustering.bed"),
+                 " -wa -wb > ",
+                 file.path (working.dir, "tumor.MAF_clustering.bed"))
     system(ff)
 
-    maf.clustering <- read.delim(paste0(working.dir, "/tumor.MAF_clustering.bed"), header = F)
+    maf.clustering <- read.delim(file.path (working.dir, "tumor.MAF_clustering.bed"), header = F)
     maf <- tapply(maf.clustering[, 4], maf.clustering[, 9], median)
     if(length(maf) < length(group.mean)){
       group.mean <- group.mean[names(maf)]
@@ -263,9 +265,9 @@ purityEstimate <- function(Segment, working.dir = NULL, result.dir = NULL,
 
   colnames(sampleinfo) <- c("purity", "ploidy", "WholeGenomeDoubling", "segmentMethod")
   if(!is.null(prefix)){
-    write.table(sampleinfo, paste0(result.dir, "/", prefix, "_", reportname), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(sampleinfo, file.path (result.dir, paste0(prefix, "_", reportname)), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(sampleinfo, paste0(result.dir, "/", reportname), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(sampleinfo, file.path (result.dir, reportname), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   allsegRes <- Segment$segmentUnadjusted
@@ -291,11 +293,11 @@ purityEstimate <- function(Segment, working.dir = NULL, result.dir = NULL,
     }
 
   if(!is.null(prefix)){
-    write.table(eventinfo, paste0(result.dir, "/", prefix, "_Event.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-    write.table(copynumber, paste0(result.dir, "/", prefix, "_Copynumber.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(eventinfo, file.path (result.dir, paste0( prefix, "_Event.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(copynumber, file.path (result.dir, paste0(prefix, "_Copynumber.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(eventinfo, paste0(result.dir, "/Event.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-    write.table(copynumber, paste0(result.dir, "/Copynumber.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(eventinfo, file.path (result.dir, "Event.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(copynumber, file.path (result.dir, "Copynumber.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
   Segment$sampleinfo <- sampleinfo
   Segment$event <- eventinfo

@@ -4,11 +4,11 @@ suppressPackageStartupMessages(library(optparse))
 
 option_list <- list (
                      make_option (c("-t","--tumor"),
-                                  default="/input/tumor.bed",
+                                  default="tumor.bed",
                                   help="The Tumor BED counts file [default %default]"),
 
                      make_option (c("-n","--normal"),
-                                  default="/input/normal.bed",
+                                  default="normal.bed",
                                   help="The normal BED counts file [default %default]"),
 
                      make_option (c("-s","--samplename"),
@@ -24,13 +24,13 @@ option_list <- list (
                                   help="the output directory [default %default]"),
 
                      make_option (c("-T","--tmpdir"),
-                                  default="/tmp",
+                                  default=tempdir(),
                                   help="the temporary directory [default %default]"),
-                     
+
                      make_option (c("-k","--numnormals"),
                                   default="4",
                                   help="the number of normals to use for normalization [default %default]"),
-                     
+
                      make_option (c("-b","--bin"),
                                   default=50000,
                                   help="The bin size for the genome windows[default %default]"),
@@ -39,7 +39,7 @@ option_list <- list (
 #         make_option (c("-","--")
                                                              #           default="",
                                                              #           help=""),
-                         
+
                      make_option (c("-d","--debug"),
                                   action="store_true",
                                   default=FALSE,
@@ -67,24 +67,24 @@ numnormals <- opt$numnormals
 
 debug <- opt$debug
 if (debug) {
-    cat (paste("bin.size:", bin.size,"\n","tumor.file:",tumor.file,"\nnormal.file:",normal.file,"\ngenotype.file: ",genotype.file,"\n"))
+    message("bin.size:", bin.size,"\n","tumor.file:",tumor.file,"\nnormal.file:",normal.file,"\ngenotype.file: ",genotype.file,"\n")
 }
 
-if (debug) {cat ("Generating target Bins\n")}
+if (debug) {message ("Generating target Bins\n")}
 targetAnnotateBins <- createTargetBins(TargetAnnotations$Target,bin.size=bin.size)
-if (debug) {cat ("Generating centromere Bins\n")}
+if (debug) {message ("Generating centromere Bins\n")}
 centromereBins <- createCentromereBins(bin.size=bin.size)
 
 
-cat ("------Running SynthExPipeline------\n")
+message ("------Running SynthExPipeline------\n")
 Segfrompipe <- SynthExPipeline (tumor.file,normal.file,
                                 bin.size=bin.size,
                                 intersectBed.dir,
-                                genotype.file=genotype.file, 
+                                genotype.file=genotype.file,
                                 result.dir,working.dir,
                                 prefix=sample.name,
                                 verbose=debug,
                                 K=numnormals)
 
-cat ("------Finished running SynthExPipeline------\n")
+message ("------Finished running SynthExPipeline------\n")
 

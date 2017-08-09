@@ -12,9 +12,9 @@ chromosomeView <- function(Segment, prefix = NULL, saveplot = FALSE, result.dir 
 
     if(saveplot == TRUE){
       if(!is.null(prefix)){
-        jpeg(paste0(result.dir, "/", prefix, "_purity_corrected-", segmentMethod,  ".jpg"), width = 2000, height = 1600, quality = 100)
+        jpeg(file.path (result.dir, paste0(prefix, "_purity_corrected-", segmentMethod,  ".jpg")), width = 2000, height = 1600, quality = 100)
       } else {
-        jpeg(paste0(result.dir, "/purity_corrected-", segmentMethod,  ".jpg"), width = 2000, height = 1600, quality = 100)
+        jpeg(file.path (result.dir, paste0("purity_corrected-", segmentMethod,  ".jpg")), width = 2000, height = 1600, quality = 100)
       }
     }
 

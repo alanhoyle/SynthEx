@@ -1,4 +1,5 @@
-groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0.32, species, segmentMethod, returnSummary = F, bin.size = 100000){
+groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0.32,
+                         species, segmentMethod, returnSummary = F, bin.size = 100000){
   options(scipen = 50)
   totalChrLengths <- read.table(species, sep = "\t")
   threshold <- 0
@@ -11,7 +12,7 @@ groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0
   for(i in 1:dim(samples)[1]){
     sample.name <- samples[i]
     message("Sample # ", i, ": ", sample.name)
-    sampleData <- read.table(paste0(sample.dirs[i], "/SampleSegmentInput-", segmentMethod, ".txt"), as.is = TRUE, sep = "\t", na.strings = "", header = T)
+    sampleData <- read.table(file.path (sample.dirs[i], paste0("SampleSegmentInput-", segmentMethod, ".txt")), as.is = TRUE, sep = "\t", na.strings = "", header = T)
     sampleData <- sampleData[order(sampleData$chr, sampleData$start, sampleData$end), ]
     data <- rbind(data, sampleData)
   }
@@ -337,7 +338,7 @@ groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0
         gain.first <- gain.index
       }
 
-      jpeg(filename = paste(cls.names[k], "_SWITCHdna_landscape.jpg", sep = ""), width = 2000, height = 480, quality = 100)
+      jpeg(filename = paste0(cls.names[k], "_SWITCHdna_landscape.jpg"), width = 2000, height = 480, quality = 100)
       barplot((chr.gains/nsamples), chr.gains.length, space = 0, col = "darkred", border = NA, ylim = c(-1, 1), main = cls.names[k])
       barplot((-1*chr.losses/nsamples), chr.losses.length, space = 0, col = "darkgreen", border = NA, add = T)
 
@@ -376,11 +377,11 @@ groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0
         write.table(outable, paste(cls.names[k], "_SWITCHdna_summary.txt", sep = ""), sep = "\t", col.names = F, row.names = F)
       }
       else{
-        message(cls.names[k], "_SWITCHdna_summary.txt contains no elements!", sep = "")
+        message(cls.names[k], "_SWITCHdna_summary.txt contains no elements!")
       }
     }
     else{
-      message (cls.names[k], "_SWITCHdna_summary.txt contains no elements after filter!", sep = "")
+      message (cls.names[k], "_SWITCHdna_summary.txt contains no elements after filter!")
     }
   }
   if(returnSummary == T){

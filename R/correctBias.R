@@ -136,9 +136,9 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
       message("Caution: The ratios between bins at the boundaries of target and non-target regions deviate a lot from zero, indicating the ratios from the target and non-target regions are very different")
       if(saveplot == TRUE){
         if(!is.null(prefix)){
-          pdf(paste0(result.dir, "/",  prefix, "-DensityPlot--CautionSample.pdf"))
+          pdf(file.path (result.dir, paste0( prefix, "-DensityPlot--CautionSample.pdf")))
         } else {
-          pdf(paste0(result.dir, "/DensityPlot--CautionSample.pdf"))
+          pdf(file.path (result.dir, "DensityPlot--CautionSample.pdf"))
         }
       }
       if(is.null(prefix)){
@@ -156,9 +156,9 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
     } else{
       if(saveplot == TRUE){
         if(!is.null(prefix)){
-          pdf(paste0(result.dir, "/",  prefix, "-DensityPlot.pdf"))
+          pdf(file.path (result.dir, paste0(  prefix, "-DensityPlot.pdf")))
         } else {
-          pdf(paste0(result.dir, "/DensityPlot.pdf"))
+          pdf(file.path (result.dir, "DensityPlot.pdf"))
         }
       }
       if(is.null(prefix)){
@@ -185,9 +185,9 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
   ratio.res[, "ratio"] <- ratio
 
   if(!is.null(prefix)){
-    write.table(ratio.res, paste0(result.dir, "/", prefix, "_Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.res, file.path (result.dir, paste0 (prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(ratio.res, paste0(result.dir, "/Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.res, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   if(chrX == FALSE){

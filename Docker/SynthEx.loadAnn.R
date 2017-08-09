@@ -24,7 +24,7 @@ option_list <- list (
                                   help="the output directory [default %default]"),
 
                      make_option (c("-T","--tmpdir"),
-                                  default="/tmp",
+                                  default=tempdir(),
                                   help="the temporary directory [default %default]"),
 
                      make_option (c("-k","--numnormals"),
@@ -80,7 +80,7 @@ if (opt$annotation == "") {
 
 }
 
-message("Using Target ",TargetAnnotations$genome,"/",TargetAnnotations$Description,".")
+message("Using Target ",TargetAnnotations$genome,":",TargetAnnotations$Description,".")
 
 if (opt$centromeres == "") {
 
@@ -100,7 +100,7 @@ working.dir <- opt$tmpdir
 
 dir.create(working.dir,showWarnings = FALSE)
 result.dir <- opt$outdir
-dir.create(working.dir,showWarnings = FALSE)
+dir.create(result.dir,showWarnings = FALSE)
 
 
 
