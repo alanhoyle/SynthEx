@@ -8,7 +8,7 @@ createBins <- function(binsize = 100000, chromLength = NULL, write = TRUE, resul
   }
   chromosomes <- x[, 2]
   allintervals <- NULL
-  for(i in c(1:24)){
+  for(i in c(1:TargetAnnotations$numchrom + 1)){
     max <- ceiling(chromosomes[i]/binsize)
     start <- seq(1, by = binsize, length.out = max)
     end <- start + binsize - 1
@@ -16,7 +16,8 @@ createBins <- function(binsize = 100000, chromLength = NULL, write = TRUE, resul
     allintervals <- rbind(allintervals, res)
   }
   if(write == TRUE){
-    write.table(allintervals, file.path (result.dir, paste0( prefix, "_", binsize, ".bed")), col.names = F, row.names = F, quote = F, sep = "\t")
+    write.table(allintervals, file.path (result.dir, paste0( prefix, "_", binsize, ".bed")),
+                col.names = F, row.names = F, quote = F, sep = "\t")
   }
   return(allintervals)
 }

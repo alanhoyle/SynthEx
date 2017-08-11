@@ -39,7 +39,7 @@ WGS_calratio <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
   }
 
   if(chrX == FALSE){
-    ratio.res <- ratio.res[ratio.res[, "chr"]!=23, ]
+    ratio.res <- ratio.res[ratio.res[, "chr"]!=TargetAnnotations$numchrom, ]
   }
 
   res <- list(ratio.res, TRUE)

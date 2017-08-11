@@ -37,22 +37,42 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
   plot(0, 0, type = "n", ylim = c(-2, 3), xlim = c(0, xmax), axes = F, xlab = "", ylab = "", main = prefix, cex.lab = 2, cex.axis = 2)
   axis(2)
   order <- 0
-  if (verbose == TRUE) message("for loop....")
+  if (verbose == TRUE) message("for 1:", length(unique(segments$chr)))
 
   for(l in 1:length(unique(segments$chr))){
+    if (verbose == TRUE) message ("bark: ", l)
+
     sub <- segments[segments$chr == l, ]
+
+    if (l == 1 & verbose==TRUE) {
+      message ("  Got inside Forloop")
+      str (sub)
+    }
     sub.data <- data[data$chr == l, ]
-    points(sub.data$start/bin.size+order, sub.data$log2ratio, pch = 20, cex = 0.75)
+    if (verbose == TRUE) cat ("berk :", dim(sub.data$start/bin.size+order), ":",dim(sub.data$log2ratio))
+    tryCatch({
+      points(sub.data$start/bin.size+order, sub.data$log2ratio, pch = 20, cex = 0.75)
+
+    }, error = function (e) {
+      warning("Missing data for Chromosome ",l," in singleCNreport(), outputting partial graph....")
+      break
+    }
+    )
+    if (verbose == TRUE) message ("birk")
+
     for(m in 1:dim(sub)[1]){
       lines(c(sub$start[m]/bin.size+order, sub$end[m]/bin.size+order), c(sub$log2ratio[m], sub$log2ratio[m]), lwd = 5, col = "red")
     }
+
     order <- order + sub[dim(sub)[1], "end"]/bin.size
     abline(v = order, col = "gray", lty = "dashed", lwd = 2)
-    if(l == 23){
+    if (verbose == TRUE) message ("birk: ", l)
+    if(l == TargetAnnotations$numchrom){
       text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, "X", font = 2)
     } else {
       text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, l, font = 2)
     }
+    if (verbose == TRUE) message ("burk")
   }
   if (verbose == TRUE) message("for loop done.")
 
@@ -73,7 +93,7 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
 
     segments <- segments[, c("chr", "start", "end", "log2ratio")]
     segments <- as.matrix(segments)
-    segments[, 1] <- gsub("X", 23, segments[, 1])
+    segments[, 1] <- gsub("X", TargetAnnotations$numchrom, segments[, 1])
     segments <- as.data.frame(segments)
     segments <- segments[segments$chr != "Y", ]
 

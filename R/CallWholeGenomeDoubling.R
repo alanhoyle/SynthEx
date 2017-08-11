@@ -1,7 +1,7 @@
 CallWholeGenomeDoubling <- function(segRes, WGD = 1.35, pos.prop.threhold = 0.6, pos.log2ratio.threhold = 0.75){
 
   segRes$ratio <- 2^segRes[, "log2ratio"]
-  subsegRes <- segRes[segRes[, "chr"] %in% c(1:22), ]
+  subsegRes <- segRes[segRes[, "chr"] %in% c(1:(TargetAnnotations$numchrom - 1)), ]
   positiveSegments <- subsegRes[subsegRes[, "log2ratio"] > 0.1, ]
   segLens <- (subsegRes[, "end"] - subsegRes[, "start"]+1)
   ploidy <- sum(segLens*subsegRes[, "ratio"])/sum(segLens)

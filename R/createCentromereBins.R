@@ -7,7 +7,7 @@ createCentromereBins <- function(cytoband = NULL, bin.size = 100000, write = FAL
 
   cytoband[, 1] <- gsub("chr", "", cytoband[, 1])
   centromere <- NULL
-  for(i in c(1:22, "X")){
+  for(i in c(1:TargetAnnotations$numchrom, "X")){
     sub.cytoband <- cytoband[cytoband[, 1] == i, ]
     pq <- substr(sub.cytoband[, 4], 1, 1)
     pq.neighbor <- paste0(pq[-length(pq)], pq[-1])

@@ -62,7 +62,7 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
   if(substr(data[1, 1], 1, 3) == "chr") {
     data[, 1] <- gsub("chr", "", data[, 1])
   }
-  data <- data[data[, 1] %in% c(1:22), ]
+  data <- data[data[, 1] %in% c(1:(TargetAnnotations$numchrom - 1)), ]
   segments <- paste0(data[, 5], ":", data[, 6])
   median.MAF <- tapply(data[, 4], segments, median)
   median.MAF.segments <- data.frame(names(median.MAF), median.MAF)

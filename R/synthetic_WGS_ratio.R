@@ -6,7 +6,7 @@ synthetic_WGS_calratio <- function(tumor, counts, bin.size = 100000, rm.centrome
   if(substr(sampleData[1, 1], 1, 3) == "chr") {
     sampleData[, 1] <- gsub("chr", "", sampleData[, 1])
   }
-  sampleData[, 1] <- gsub("X", "23", sampleData[, 1])
+  sampleData[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), sampleData[, 1])
   if(nrow(counts) != nrow(sampleData)){
     stop("Input data and \"counts\" size don't match!")
   }
@@ -60,7 +60,7 @@ synthetic_WGS_calratio <- function(tumor, counts, bin.size = 100000, rm.centrome
   }
 
   if(chrX == FALSE){
-    ratio.res <- ratio.res[ratio.res[, "chr"]!=23, ]
+    ratio.res <- ratio.res[ratio.res[, "chr"]!=TargetAnnotations$numchrom, ]
   }
 
   res <- list(ratio.res, TRUE)

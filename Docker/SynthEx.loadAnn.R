@@ -147,6 +147,10 @@ if (is.null(eval (parse(text=paste0("CentromereAnnotations$bin", bin.size))))) {
   message ("Centromere bins exist for bin size of ",bin.size,".")
 }
 
+if (!("numchrom" %in% names(TargetAnnotations))) {
+  TargetAnnotations$numchrom = 23
+  warning("Can't find TargetAnnotations$numchrom.  Assuming human with default value of ",  TargetAnnotations$numchrom )
+}
 
 
 message ("------Running SynthExPipeline------")

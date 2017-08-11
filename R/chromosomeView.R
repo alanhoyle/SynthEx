@@ -35,7 +35,7 @@ chromosomeView <- function(Segment, prefix = NULL, saveplot = FALSE, result.dir 
     plot(0, 0, type = "n", ylim = ylim, xlim = c(0, xmax), axes = F, xlab = "", ylab = "", main = paste0("Copy Number \n", prefix), cex.lab = 2, cex.axis = 2)
     axis(2)
     order <- 0
-    for(l in c(1:22)){
+    for(l in c(1:(TargetAnnotations$numchrom - 1))){
       sub <- segments[segments$chr == l, ]
       for(m in 1:dim(sub)[1]){
         lines(c(sub$start[m]/bin.size+order, sub$end[m]/bin.size+order), c(sub$copy[m], sub$copy[m]), lwd = lwd)
@@ -54,7 +54,7 @@ chromosomeView <- function(Segment, prefix = NULL, saveplot = FALSE, result.dir 
     plot(0, 0, type = "n", ylim = c(-2, 3), xlim = c(0, xmax), axes = F, xlab = "", ylab = "", cex.lab = 1.3, cex.axis = 1.3, main = paste0("Event \n", prefix))
     axis(2)
     order <- 0
-    for(l in c(1:22)){
+    for(l in c(1:(TargetAnnotations$numchrom - 1))){
       sub <- segments[segments$chr == l, ]
       for(m in 1:dim(sub)[1]){
         lines(c(sub$start[m]/bin.size+order, sub$end[m]/bin.size+order), c(sub$correctedlog2ratiobyPurity[m], sub$correctedlog2ratiobyPurity[m]), lwd = lwd, col = sub$color[m])

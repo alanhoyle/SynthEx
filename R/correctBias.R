@@ -69,7 +69,7 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
   all.dis.within.target.left <- NULL
   all.dis.within.target.right <- NULL
 
-  allchrs <- ifelse(chrX == TRUE, 1:23, 1:22)
+  allchrs <- ifelse(chrX == TRUE, 1:TargetAnnotations$numchrom, 1:(TargetAnnotations$numchrom -1))
   for(i in allchrs){
     chr.ratio <- ratio[grep(paste0(i, ":"), ratio.IDs)]
     chr.names <- ratio.IDs[grep(paste0(i, ":"), ratio.IDs)]
@@ -191,7 +191,7 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
   }
 
   if(chrX == FALSE){
-    ratio.res <- ratio.res[ratio.res[, "chr"]!=23, ]
+    ratio.res <- ratio.res[ratio.res[, "chr"]!=TargetAnnotations$numchrom, ]
   }
 
   res <- list(target.bias.statistics, ratio.res, FALSE)

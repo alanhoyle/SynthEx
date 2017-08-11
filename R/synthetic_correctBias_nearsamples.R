@@ -9,8 +9,8 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
   if(substr(sampleData[1, 1], 1, 3) == "chr") {
     sampleData[, 1] <- gsub("chr", "", sampleData[, 1])
   }
-  sampleData[, 1] <- gsub("X", "23", sampleData[, 1])
-  sampleData[, 1] <- gsub("Y", "24", sampleData[, 1])
+  sampleData[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), sampleData[, 1])
+  sampleData[, 1] <- gsub("Y", toString(TargetAnnotations$numchrom+1), sampleData[, 1])
   if(nrow(counts) != nrow(sampleData)){
     stop("Input data and \"counts\" size don't match!")
   }
@@ -91,7 +91,7 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
   all.dis.within.target.left <- NULL
   all.dis.within.target.right <- NULL
 
-  allchrs <- 1:22
+  allchrs <- 1:(TargetAnnotations$numchrom - 1)
 
   for(i in allchrs){
     chr.ratio <- ratio[grep(paste0(i, ":"), ratio.IDs)]
@@ -204,7 +204,7 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
   }
 
   if(chrX == FALSE){
-    ratio.res <- ratio.res[ratio.res[, "chr"] != 23 & ratio.res[, "chr"] != 24, ]
+    ratio.res <- ratio.res[ratio.res[, "chr"] != TargetAnnotations$numchrom & ratio.res[, "chr"] != (TargetAnnotations$numchrom + 1), ]
   }
 
   res <- list(target.bias.statistics, ratio.res, TRUE, minIs)
