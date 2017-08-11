@@ -47,7 +47,7 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
     Segments <- PurityCorrected
   }
 
-  if(verbose == TRUE) message("Report can be found at: ", result.dir,)
+  if(verbose == TRUE) message("Report can be found at: ", result.dir)
 
   return(Segments)
 

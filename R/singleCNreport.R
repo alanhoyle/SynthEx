@@ -8,19 +8,19 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
   segmentMethod <- Segment$segmentMethod
 
   if(plotNormalized == TRUE & !is.null(Segment$segmentNormalized)){
-    segments <- Segment$segmentNormalized
+    segments.chrom <- Segment$segmentNormalized
     data <- Segment$Ratio[, c("chr", "start", "end", "normalized")]
     data$log2ratio <- round(log2(data[, "normalized"] + 0.0001), 4)
   } else {
-    segments <- Segment$segmentUnadjusted
+    segments.chrom <- Segment$segmentUnadjusted
     data <- Segment$Ratio[, c("chr", "start", "end", "ratio")]
     data$log2ratio <- round(log2(data[, "ratio"] + 0.0001), 4)
   }
   if (verbose == TRUE) message("CallWholeGenomeDoubling...")
 
-  Segment$WholeGenomeDoubling <- CallWholeGenomeDoubling(segments, WGD = WGD, pos.prop.threhold = pos.prop.threhold, pos.log2ratio.threhold = pos.log2ratio.threhold)$WholeGenomeDoubling
+  Segment$WholeGenomeDoubling <- CallWholeGenomeDoubling(segments.chrom, WGD = WGD, pos.prop.threhold = pos.prop.threhold, pos.log2ratio.threhold = pos.log2ratio.threhold)$WholeGenomeDoubling
   bin.size <- data[1, "end"] - data[1, "start"] + 1
-  maxlength <- tapply(segments$end, segments$chr, max)
+  maxlength <- tapply(segments.chrom$end, segments.chrom$chr, max)
   xmax <- sum(maxlength/bin.size) + 400
 
   if(saveplot == TRUE){
@@ -37,28 +37,34 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
   plot(0, 0, type = "n", ylim = c(-2, 3), xlim = c(0, xmax), axes = F, xlab = "", ylab = "", main = prefix, cex.lab = 2, cex.axis = 2)
   axis(2)
   order <- 0
-  if (verbose == TRUE) message("for 1:", length(unique(segments$chr)))
 
-  for(l in 1:length(unique(segments$chr))){
-    if (verbose == TRUE) message ("bark: ", l)
+  # for(l in 1:length(unique(segments.chrom$chr))){
 
-    sub <- segments[segments$chr == l, ]
+  l=0
+  maxl = length(unique(segments.chrom$chr))
 
-    if (l == 1 & verbose==TRUE) {
-      message ("  Got inside Forloop")
+  while (l < maxl) {
+    l=l+1
+
+    sub <- segments.chrom[segments.chrom$chr == l, ]
+
+    if (l == 1 & verbose==TRUE & TRUE == FALSE) {
+      message ("  Got inside WHILE")
       str (sub)
     }
     sub.data <- data[data$chr == l, ]
-    if (verbose == TRUE) cat ("berk :", dim(sub.data$start/bin.size+order), ":",dim(sub.data$log2ratio))
-    tryCatch({
+    durr = tryCatch({
       points(sub.data$start/bin.size+order, sub.data$log2ratio, pch = 20, cex = 0.75)
 
-    }, error = function (e) {
+    }, error = function (e) {"ERR"})
+
+    if (length (durr)>0) {
       warning("Missing data for Chromosome ",l," in singleCNreport(), outputting partial graph....")
-      break
+      # break
+      l= maxl +1
+      next
     }
-    )
-    if (verbose == TRUE) message ("birk")
+
 
     for(m in 1:dim(sub)[1]){
       lines(c(sub$start[m]/bin.size+order, sub$end[m]/bin.size+order), c(sub$log2ratio[m], sub$log2ratio[m]), lwd = 5, col = "red")
@@ -66,15 +72,12 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
 
     order <- order + sub[dim(sub)[1], "end"]/bin.size
     abline(v = order, col = "gray", lty = "dashed", lwd = 2)
-    if (verbose == TRUE) message ("birk: ", l)
     if(l == TargetAnnotations$numchrom){
       text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, "X", font = 2)
     } else {
       text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, l, font = 2)
     }
-    if (verbose == TRUE) message ("burk")
   }
-  if (verbose == TRUE) message("for loop done.")
 
   if(Segment$WholeGenomeDoubling == TRUE){
     abline(h = log2(1/Segment$Adjust), col = "brown", lty = "dashed", lwd = 2)
@@ -86,21 +89,21 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
   }
   if(report == TRUE){
     if(plotNormalized == TRUE & !is.null(Segment$segmentNormalized)){
-      segments <- Segment$segmentNormalized
+      segments.chrom <- Segment$segmentNormalized
     } else {
-      segments <- Segment$segmentUnadjusted
+      segments.chrom <- Segment$segmentUnadjusted
     }
 
-    segments <- segments[, c("chr", "start", "end", "log2ratio")]
-    segments <- as.matrix(segments)
-    segments[, 1] <- gsub("X", TargetAnnotations$numchrom, segments[, 1])
-    segments <- as.data.frame(segments)
-    segments <- segments[segments$chr != "Y", ]
+    segments.chrom <- segments.chrom[, c("chr", "start", "end", "log2ratio")]
+    segments.chrom <- as.matrix(segments.chrom)
+    segments.chrom[, 1] <- gsub("X", TargetAnnotations$numchrom, segments.chrom[, 1])
+    segments.chrom <- as.data.frame(segments.chrom)
+    segments.chrom <- segments.chrom[segments.chrom$chr != "Y", ]
 
-    if (verbose == TRUE) message("segments is set...")
+    # if (verbose == TRUE) message("segments.chrom is set...")
 
     if(is.null(prefix)){
-      dataSample <- segments
+      dataSample <- segments.chrom
       colnames(dataSample) <-c("chr", "start", "end", "seg.mean")
       if(!is.null(prefix)){
         write.table(dataSample, file.path (result.dir, paste0(prefix, "-Segment-", segmentMethod, "-", bin.size, ".txt")),
@@ -110,7 +113,7 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
                     col.names = T, row.names = F, sep = "\t", quote = F)
       }
     } else {
-      dataSample <- cbind(prefix, segments)
+      dataSample <- cbind(prefix, segments.chrom)
       colnames(dataSample) <-c("sample", "chr", "start", "end", "seg.mean")
       if(!is.null(prefix)){
         write.table(dataSample, file.path (result.dir, paste0(prefix, "-Segment-", segmentMethod, "-", bin.size, ".txt")),
