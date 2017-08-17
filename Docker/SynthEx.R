@@ -71,12 +71,12 @@ datalist = data()$results
 if (opt$annotation == "") {
 
   data ("TargetAnnotations")
-} else if (opt$annotation %in% datalist) {
-    data(list=opt$annotation)
 } else if (file.exists (opt$annotation)) {
     load (file=opt$annotation)
-} else {
-  stop("Can't find target annotations for ",opt$annotation,".")
+} else 
+    tryCatch (data(package='SynthEx', list=opt$annotation))
+#} else {
+#  stop("Can't find target annotations for ",opt$annotation,".")
 
 }
 
