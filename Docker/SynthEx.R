@@ -73,7 +73,7 @@ if (opt$annotation == "") {
   data ("TargetAnnotations")
 } else if (file.exists (opt$annotation)) {
     load (file=opt$annotation)
-} else 
+} else {
     tryCatch (data(package='SynthEx', list=opt$annotation))
 #} else {
 #  stop("Can't find target annotations for ",opt$annotation,".")
@@ -85,12 +85,12 @@ message("Using Target ",TargetAnnotations$genome,":",TargetAnnotations$Descripti
 if (opt$centromeres == "") {
 
   data ("CentromereAnnotations")
-} else  if (opt$centromeres %in% datalist) {
-  data(list=opt$centromeres)
 } else if (file.exists (opt$centromeres)) {
   load (file=opt$centromeres)
-} else {
-  stop("Can't find centromeres for ",opt$centromeres,".")
+} else  {
+  tryCatch (data(list=opt$centromeres))
+#} else {
+#  stop("Can't find centromeres for ",opt$centromeres,".")
 
 }
 
