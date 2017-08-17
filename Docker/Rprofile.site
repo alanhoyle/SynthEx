@@ -1,5 +1,5 @@
 .First <- function(){
-  message ("\nStarting R with Synthex at", date(),"\n")
+  message ("\nStarting R with Synthex at ", date(),"\n")
   library(SynthEx)
   intersectBed.dir <- system ("which intersectBed",intern=TRUE)
 
@@ -7,5 +7,5 @@
 
 .Last <- function () {
 
-  message ("\nFinishing R with Synthex at", date(),"\n")
+  message ("\nFinishing R with Synthex at ", date(),"\n")
 }
