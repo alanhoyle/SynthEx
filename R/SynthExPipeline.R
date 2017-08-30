@@ -32,7 +32,7 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
 
   if(verbose == TRUE) message("Segmentation finished.",
                               "\nstr(Seg)=",str(Seg),
-                              "\nhead(Seg)=",head(Seg),
+                              # "\nhead(Seg)=",head(Seg),
                               "\n")
 
   Segments <- singleCNreport(Seg, report = report, result.dir = result.dir, saveplot = saveplot,
