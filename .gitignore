@@ -3,6 +3,7 @@
 *DensityPlot.pdf
 *Ratio.bed
 .Rhistory
+.RData
 .Rproj.user
 .gitignore
 SAMPLE*
