@@ -9,17 +9,21 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
 
   if(plotNormalized == TRUE & !is.null(Segment$segmentNormalized)){
     segments.chrom <- Segment$segmentNormalized
-    data <- Segment$Ratio[, c("chr", "start", "end", "normalized")]
-    data$log2ratio <- round(log2(data[, "normalized"] + 0.0001), 4)
+    segment.data <- Segment$Ratio[, c("chr", "start", "end", "normalized")]
+    segment.data$log2ratio <- round(log2(segment.data[, "normalized"] + 0.0001), 4)
   } else {
     segments.chrom <- Segment$segmentUnadjusted
-    data <- Segment$Ratio[, c("chr", "start", "end", "ratio")]
-    data$log2ratio <- round(log2(data[, "ratio"] + 0.0001), 4)
+    segment.data <- Segment$Ratio[, c("chr", "start", "end", "ratio")]
+    segment.data$log2ratio <- round(log2(segment.data[, "ratio"] + 0.0001), 4)
   }
   if (verbose == TRUE) message("CallWholeGenomeDoubling...")
 
-  Segment$WholeGenomeDoubling <- CallWholeGenomeDoubling(segments.chrom, WGD = WGD, pos.prop.threhold = pos.prop.threhold, pos.log2ratio.threhold = pos.log2ratio.threhold)$WholeGenomeDoubling
-  bin.size <- data[1, "end"] - data[1, "start"] + 1
+
+  Segment$WholeGenomeDoubling <- CallWholeGenomeDoubling(segments.chrom, WGD = WGD,
+                                                         pos.prop.threhold = pos.prop.threhold,
+                                                         pos.log2ratio.threhold = pos.log2ratio.threhold,
+                                                         verbose=F)$WholeGenomeDoubling
+  bin.size <- segment.data[1, "end"] - segment.data[1, "start"] + 1
   maxlength <- tapply(segments.chrom$end, segments.chrom$chr, max)
   xmax <- sum(maxlength/bin.size) + 400
 
@@ -47,12 +51,27 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
     l=l+1
 
     sub <- segments.chrom[segments.chrom$chr == l, ]
-
-    if (l == 1 & verbose==TRUE & TRUE == FALSE) {
-      message ("  Got inside WHILE")
+    sub.data <- segment.data[segment.data$chr == l, ]
+    if (l == 1 & verbose==TRUE ) {
+      message ("  Got inside WHILE...",
+               "\n  maxl= ",maxl,
+               "")
       str (sub)
     }
-    sub.data <- data[data$chr == l, ]
+
+   if (verbose == TRUE) {
+     message ("iteration: ",l,"\n",
+              "  str(sub): ",
+              ""
+     )
+     str(sub)
+     message ("  str(sub.data):",
+              ""     )
+     str(sub.data)
+#      message (levels(factor(sub.data$chr)))
+
+   }
+
     durr = tryCatch({
       points(sub.data$start/bin.size+order, sub.data$log2ratio, pch = 20, cex = 0.75)
 
@@ -61,7 +80,7 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
     if (length (durr)>0) {
       warning("Missing data for Chromosome ",l," in singleCNreport(), outputting partial graph....")
       # break
-      l= maxl +1
+     # l= maxl +1
       next
     }
 
