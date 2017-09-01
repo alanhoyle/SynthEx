@@ -1,4 +1,12 @@
-CallWholeGenomeDoubling <- function(segRes, WGD = 1.35, pos.prop.threhold = 0.6, pos.log2ratio.threhold = 0.75){
+CallWholeGenomeDoubling <- function(segRes, WGD = 1.35, pos.prop.threhold = 0.6, pos.log2ratio.threhold = 0.75,verbose=FALSE){
+
+  if (verbose == TRUE) {
+    message("start CallWholeGenomeDoubling...",
+            "\nhead(segRes)=",head(segRes),
+            "\n")
+    str(segRes)
+
+  }
 
   segRes$ratio <- 2^segRes[, "log2ratio"]
   subsegRes <- segRes[segRes[, "chr"] %in% c(1:(TargetAnnotations$numchrom - 1)), ]
@@ -15,6 +23,15 @@ CallWholeGenomeDoubling <- function(segRes, WGD = 1.35, pos.prop.threhold = 0.6,
   }
   res <- list(WholeGenomeDoubling, ploidy)
   names(res) <- c("WholeGenomeDoubling", "ploidy")
+
+  if (verbose == TRUE) {
+    message("ending CallWholeGenomeDoubling...",
+            "\nhead (res) = ",head(res),
+            "\n")
+
+  }
+
+
   return(res)
 
 }

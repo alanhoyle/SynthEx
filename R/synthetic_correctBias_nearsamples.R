@@ -6,13 +6,17 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
 
   sampleData <- tumor
 
-  if(substr(sampleData[1, 1], 1, 3) == "chr") {
-    sampleData[, 1] <- gsub("chr", "", sampleData[, 1])
-  }
-  sampleData[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), sampleData[, 1])
-  sampleData[, 1] <- gsub("Y", toString(TargetAnnotations$numchrom+1), sampleData[, 1])
+  sampleData[, 1] <- gsub("^chr", "", sampleData[, 1])
+  sampleData[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), sampleData[, 1])
+  sampleData[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom+1), sampleData[, 1])
+
+  suppressWarnings (
+    {
+      sampleData = sampleData[!is.na(as.integer(sampleData[,1])), ]
+    }
+  )
   if(nrow(counts) != nrow(sampleData)){
-    stop("Input data and \"counts\" size don't match!")
+    stop("Input data and \"counts\" size don't match! ", nrow(sampleData), " vs ", nrow(counts))
   }
 
   all.value <- NULL

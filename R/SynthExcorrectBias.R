@@ -14,11 +14,18 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
     stop("Wrong input for tumor sample. A bed file is expected")
   }
   colnames(tumor) <- c("chr", "start", "end", "reads")
-  if(substr(tumor[1, 1], 1, 3) == "chr") {
-    tumor[, 1] <- gsub("chr", "", tumor[, 1])
-  }
-  tumor[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), tumor[, 1])
-  tumor[, 1] <- gsub("Y", toString(TargetAnnotations$numchrom + 1), tumor[, 1])
+
+  tumor[, 1] <- gsub("^chr", "", tumor[, 1])
+  tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
+  tumor[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), tumor[, 1])
+
+  # discard all entries that are not numeric since I just converted X and Y to numbers right above
+  suppressWarnings (
+      {
+        tumor =  tumor[!is.na(as.integer(tumor[,1])), ]
+      }
+    )
+
   len <- tumor[1, "end"] - tumor[1, "start"]
   if(len != bin.size ){
     stop("\"bin.size\" should match with the input file!")
@@ -30,12 +37,19 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
     normal <- read.delim(normal, header = F, as.is = T)
   }
   if(class(normal) == "data.frame"){
-    if(ncol(normal) == 4){
-      if(substr(normal[1, 1], 1, 3) == "chr") {
-        normal[, 1] <- gsub("chr", "", normal[, 1])
+
+    normal[, 1] <- gsub("^chr", "", normal[, 1])
+    normal[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), normal[, 1])
+    normal[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), normal[, 1])
+
+    suppressWarnings (
+      {
+        normal = normal[!is.na(as.integer(normal[,1])), ]
       }
-      normal[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), normal[, 1])
-      normal[, 1] <- gsub("Y", toString(TargetAnnotations$numchrom + 1), normal[, 1])
+    )
+
+    if(ncol(normal) == 4){
+
       colnames(normal) <- c("chr", "start", "end", "reads")
       len2 <- normal[1, "end"] - normal[1, "start"]
       if( len2 != bin.size | len != len2){
@@ -44,6 +58,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
     }
 
     normal[, 2] <- normal[, 2] + 1
+
 
     if(ncol(normal) > 4){
       if(K > 1){
