@@ -7,11 +7,10 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
   if(class(syntheticLibrary) != "syntheticLibrary")
     stop("Invalid class for syntheticLibrary!")
 
-  sampleData <- tumor
-  if(substr(sampleData[1, 1], 1, 3) == "chr") {
-    sampleData[, 1] <- gsub("chr", "", sampleData[, 1])
+  if(substr(tumor[1, 1], 1, 3) == "chr") {
+    tumor[, 1] <- gsub("chr", "", tumor[, 1])
   }
-  sampleData[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), sampleData[, 1])
+  tumor[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), tumor[, 1])
 
   NumProtocol <- syntheticLibrary$NumProtocol
   all.variance <- NULL
@@ -24,9 +23,9 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
       for(k in 1:length(current.synthetic.normal$foldChangeLevel)){
         normal <- current.synthetic.normal$value[j, k, ]
         if(!all(is.na(normal))){
-          sampleData[sampleData[, "reads"] < reads.threshold, "reads"] <- 0
+          tumor[tumor[, "reads"] < reads.threshold, "reads"] <- 0
           normal[normal < reads.threshold] <- 0
-          ratio <- sampleData[, "reads"]/normal
+          ratio <- tumor[, "reads"]/normal
           ratio <- ratio[is.finite(ratio) & ratio != 0 ]
           ratio <- ratio/median(ratio, na.rm = T)
           log.ratio <- log2(ratio[!is.na(ratio)]+0.001)
@@ -53,10 +52,10 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
   current.synthetic.normal <- syntheticLibrary$Protocol[[index]]
   normal <- current.synthetic.normal$value[all.variance[index, 2], all.variance[index, 3], ]
   normal[normal < reads.threshold] <- 0
-  ratio <- sampleData[, "reads"]/normal
+  ratio <- tumor[, "reads"]/normal
   ratio <- ratio/median(ratio[is.finite(ratio) & ratio != 0], na.rm = T)
   ratio[is.infinite(ratio) | is.nan(ratio)] <- NA
-  ratio.res <- data.frame(sampleData[, c(1:3)], ratio)
+  ratio.res <- data.frame(tumor[, c(1:3)], ratio)
 
   if(rm.centromere == TRUE) {
     if(is.null(centromereBins)){
@@ -69,7 +68,7 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, as.is = c(T,F,F))
     }
     centromere[, 2] <- centromere[, 2] + 1
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])

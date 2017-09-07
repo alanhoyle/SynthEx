@@ -1,6 +1,7 @@
 SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE, K = 1,
                              targetAnnotateBins = NULL, saveplot = FALSE, centromereBins = NULL, chrX = FALSE,
-                             plot = TRUE, result.dir = NULL, working.dir = NULL, prefix = NULL, reads.threshold = 25){
+                             plot = TRUE, result.dir = NULL, working.dir = NULL, prefix = NULL, reads.threshold = 25,
+                             verbose=FALSE){
   options(scipen = 50)
   if(is.null(result.dir)) result.dir <- "result"
   if(is.null(working.dir)) working.dir <- "working"
@@ -9,7 +10,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
   dir.create(result.dir,showWarnings = FALSE)
 
   if(class(tumor) == "character"){
-    tumor <- read.delim(tumor, header = F, as.is = T)
+    tumor <- read.delim(tumor, header = F, stringsAsFactors = FALSE)
     if(ncol(tumor) != 4)
     stop("Wrong input for tumor sample. A bed file is expected")
   }
@@ -18,6 +19,13 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
   tumor[, 1] <- gsub("^chr", "", tumor[, 1])
   tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
   tumor[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), tumor[, 1])
+
+  if (verbose == TRUE) {
+    message("SynthExCorrectBias")
+#    message ("str(tumor):")
+#    str(tumor)
+#    message ("Unique tumor$chr: ", paste(unique(tumor$chr),collapse=', '))
+  }
 
   # discard all entries that are not numeric since I just converted X and Y to numbers right above
   suppressWarnings (
@@ -34,7 +42,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
 
 
   if(class(normal) == "character"){
-    normal <- read.delim(normal, header = F, as.is = T)
+    normal <- read.delim(normal, header = F, stringsAsFactors = F)
   }
   if(class(normal) == "data.frame"){
 
@@ -73,7 +81,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
     } else {
       Corrected <- correctBias(tumor, normal, bin.size = bin.size, rm.centromere = rm.centromere,
                              targetAnnotateBins = targetAnnotateBins, saveplot = saveplot, centromereBins = centromereBins, chrX = chrX,
-                             plot = plot, result.dir = result.dir, prefix = prefix, reads.threshold = reads.threshold)
+                             plot = plot, result.dir = result.dir, prefix = prefix, reads.threshold = reads.threshold,verbose = verbose)
 
     }
   } else if(class(normal) == "syntheticLibrary"){

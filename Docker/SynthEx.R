@@ -43,16 +43,15 @@ option_list <- list (
                                   default="",
                                   help="an RData file for the centromere annotations [default is based on hg19]"),
 
-
-#         make_option (c("-","--")
-                                                             #           default="",
-                                                             #           help=""),
+                     make_option (c("-X","--includexy"),
+                                  action="store_true",
+                                  default=FALSE,
+                                  help="Include the X and Y chromosomes in segment output"),
 
                      make_option (c("-d","--debug"),
                                   action="store_true",
                                   default=FALSE,
-                                  help="Enable Debugging options")
-
+                                  help="Enable Debugging options"),
     )
 
 
@@ -61,6 +60,8 @@ opt  <- parse_args(OptionParser(#usage= "usage: %prog [options]",
                    )
 
 bin.size = opt$bin
+
+chrX=opt$includexy
 
 intersectBed.dir <- system("which intersectBed", intern=TRUE)
 
@@ -161,6 +162,7 @@ system.time (Segfrompipe <- SynthExPipeline (tumor.file,normal.file,
                                 result.dir,working.dir,
                                 prefix=sample.name,
                                 verbose=debug,
+                                chrX=chrX,
                                 K=numnormals)
 )
 

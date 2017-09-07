@@ -1,26 +1,33 @@
 correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
                         targetAnnotateBins = NULL, centromereBins = NULL, chrX = FALSE, plot = TRUE,
-                        saveplot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50){
+                        saveplot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
+                        verbose=F){
 
   options(scipen = 50)
 
-  x <- tumor
-  y <- normal
-  x[x[, "reads"] <= reads.threshold, "reads"] <- 0
-  y[y[, "reads"] <= reads.threshold, "reads"] <- 0
+  if(verbose == TRUE && 1==2) {
+    message ("correctBias: str(tumor):")
+    str(tumor)
+    message ("Unique tumor$chr: ", paste(unique(tumor$chr),collapse=', '))
 
-  factor <- sum(x[, "reads"])/sum(y[, "reads"])
+  }
+
+
+  tumor[tumor[, "reads"] <= reads.threshold, "reads"] <- 0
+  normal[normal[, "reads"] <= reads.threshold, "reads"] <- 0
+
+  factor <- sum(tumor[, "reads"])/sum(normal[, "reads"])
 
   if(factor <= 0.75 | factor >= 1.5){
-    y[, "normalized"] <- round(y[, "reads"]*factor, 3)
-    y[y[, "normalized"] < reads.threshold, "normalized"] <- 0
-    ratio <- x[, "reads"]/y[, "normalized"]
+    normal[, "normalized"] <- round(normal[, "reads"]*factor, 3)
+    normal[normal[, "normalized"] < reads.threshold, "normalized"] <- 0
+    ratio <- tumor[, "reads"]/normal[, "normalized"]
   } else {
-    ratio <- x[, "reads"]/y[, "reads"]
+    ratio <- tumor[, "reads"]/normal[, "reads"]
   }
   ratio[is.infinite(ratio) | is.nan(ratio)] <- NA
-  ratio.IDs <- paste0(x[, "chr"], ":", x[, "start"])
-  ratio.res <- data.frame(x[, c("chr", "start", "end")], ratio)
+  ratio.IDs <- paste0(tumor[, "chr"], ":", tumor[, "start"])
+  ratio.res <- data.frame(tumor[, c("chr", "start", "end")], ratio)
 
   if(rm.centromere == TRUE) {
     if(is.null(centromereBins)){
@@ -32,7 +39,7 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere[, 2] <- centromere[, 2] + 1
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])

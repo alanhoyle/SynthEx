@@ -1,10 +1,10 @@
 CallWholeGenomeDoubling <- function(segRes, WGD = 1.35, pos.prop.threhold = 0.6, pos.log2ratio.threhold = 0.75,verbose=FALSE){
 
   if (verbose == TRUE) {
-    message("start CallWholeGenomeDoubling...",
-            "\nhead(segRes)=",head(segRes),
-            "\n")
-    str(segRes)
+    message("start CallWholeGenomeDoubling...")
+
+#    message ("head(segRes)=",head(segRes),"\n")
+#    str(segRes)
 
   }
 

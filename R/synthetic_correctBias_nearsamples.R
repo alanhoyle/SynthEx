@@ -4,27 +4,25 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
 
   options(scipen = 50)
 
-  sampleData <- tumor
-
-  sampleData[, 1] <- gsub("^chr", "", sampleData[, 1])
-  sampleData[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), sampleData[, 1])
-  sampleData[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom+1), sampleData[, 1])
+  tumor[, 1] <- gsub("^chr", "", tumor[, 1])
+  tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
+  tumor[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom+1), tumor[, 1])
 
   suppressWarnings (
     {
-      sampleData = sampleData[!is.na(as.integer(sampleData[,1])), ]
+      tumor = tumor[!is.na(as.integer(tumor[,1])), ]
     }
   )
-  if(nrow(counts) != nrow(sampleData)){
-    stop("Input data and \"counts\" size don't match! ", nrow(sampleData), " vs ", nrow(counts))
+  if(nrow(counts) != nrow(tumor)){
+    stop("Input data and \"counts\" size don't match! ", nrow(tumor), " vs ", nrow(counts))
   }
 
   all.value <- NULL
   for(i in 1:ncol(counts)){
     normal <- counts[, i]
-    sampleData[sampleData[, "reads"] < reads.threshold, "reads"] <- 0
+    tumor[tumor[, "reads"] < reads.threshold, "reads"] <- 0
     normal[normal < reads.threshold] <- 0
-    ratio <- sampleData[, "reads"]/normal
+    ratio <- tumor[, "reads"]/normal
     ratio <- ratio[is.finite(ratio) & ratio != 0 ]
     ratio <- ratio/median(ratio, na.rm = T)
     log.ratio <- log2(ratio[!is.na(ratio)]+0.001)
@@ -39,10 +37,10 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
     normal <- counts[, minIs]
   }
   normal[normal < reads.threshold] <- 0
-  ratio <- sampleData[, "reads"]/normal
+  ratio <- tumor[, "reads"]/normal
   ratio <- ratio/median(ratio[is.finite(ratio) & ratio != 0], na.rm = T)
   ratio[is.infinite(ratio) | is.nan(ratio)] <- NA
-  ratio.res <- data.frame(sampleData[, c(1:3)], ratio)
+  ratio.res <- data.frame(tumor[, c(1:3)], ratio)
 
   if(rm.centromere == TRUE) {
     if(is.null(centromereBins)){
@@ -55,7 +53,7 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere[, 2] <- centromere[, 2] + 1
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])

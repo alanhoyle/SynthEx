@@ -29,10 +29,10 @@ normalization <- function(ratioCorrectedBias, bedTools.dir, genotype.file, vcf =
     system(ff)
   }
   ##########
-  data <- read.delim(file.path (working.dir, "tumor.MAF.ratio.bed"), header = F)
-  if(substr(data[1, 1], 1, 3) == "chr") {
-    data[, 1] <- gsub("chr", "", data[, 1])
-  }
+  data <- read.delim(file.path (working.dir, "tumor.MAF.ratio.bed"), header = F,stringsAsFactors = F)
+
+  data[, 1] <- gsub("^chr", "", data[, 1])
+
   data <- data[data[, 1] %in% c(1:(TargetAnnotations$numchrom - 1)), ]
   segments <- paste0(data[, 5], ":", data[, 6])
   median.MAF <- tapply(data[, 4], segments, median)

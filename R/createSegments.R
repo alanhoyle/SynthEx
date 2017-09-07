@@ -1,4 +1,4 @@
-createSegments <- function(ratio, segmentMethod = c("CBS", "SomaticaEx", "TrendFiltering")){
+createSegments <- function(ratio, segmentMethod = c("CBS", "SomaticaEx", "TrendFiltering"),verbose=F){
 
   if(class(ratio) != "RatioNormalized")
     stop("Invalid input class for createSegments().")
@@ -24,6 +24,15 @@ createSegments <- function(ratio, segmentMethod = c("CBS", "SomaticaEx", "TrendF
     #segRes[, 4] <- round(log2(segRes[, 4]+0.0001), 4)
     seg <- segment(CNA(log2(subratioNormalized[, "normalized"]+0.0001), subratioNormalized[, "chr"], subratioNormalized[, "start"]), verbose = 0)
     segRes <- seg$output[, c(2:4, 6)]
+
+    if(verbose == TRUE) {
+      message ("in createSegments::CBS")
+
+#      message ("  str(segRes): ")
+#      str(segRes)
+    }
+
+    segRes[, 1] <- as.character(segRes[, 1])
     segRes[, 2] <- segRes[, 2] - 1
     segRes[, 3] <- segRes[, 3] + bin.size - 1
   }
@@ -112,6 +121,9 @@ createSegments <- function(ratio, segmentMethod = c("CBS", "SomaticaEx", "TrendF
     segRes[, 4] <- round(log2(segRes[, 4]+0.0001), 4)
   }
   segRes <- data.frame(segRes)
+
+  segRes[, 1] <- as.character(segRes[, 1])
+
 
   colnames(segRes) <- colnames(normalizedSeg) <- c("chr", "start", "end", "log2ratio")
 

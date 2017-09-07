@@ -13,27 +13,45 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
   ratioCorrectedBias <- SynthExcorrectBias(tumor, normal, bin.size = bin.size, rm.centromere = rm.centromere,
              targetAnnotateBins = targetAnnotateBins, saveplot = saveplot, centromereBins = centromereBins,
              chrX = chrX, plot = plot, result.dir = result.dir, working.dir = working.dir, K =K,
-             prefix = prefix, reads.threshold = reads.threshold)
+             prefix = prefix, reads.threshold = reads.threshold,
+             verbose=verbose)
 
-  if(verbose == TRUE) message("Bias correction finished.")
+  if(verbose == TRUE) {
+    message("Bias correction finished.")
+#    message ("ratioCorrectedBias: ")
+#    str(ratioCorrectedBias)
+#    message ("Unique ratioCorrectedBias$Ratio$chr: ", paste(unique(ratioCorrectedBias$Ratio$chr),collapse=', '))
+
+  }
 
   if(!is.null(genotype.file)){
     ratioNormalized <- normalization(ratioCorrectedBias, bedTools.dir = bedTools.dir, genotype.file = genotype.file, vcf = vcf,
           working.dir = working.dir, result.dir = result.dir, cutoff = reads.threshold, plot = plot, saveplot = saveplot,
           prefix = prefix,  adjust.cutoff = adjust.cutoff, seg.count = seg.count)
     if(verbose == TRUE) message("Normalization finished.")
-    ratiotoSeg <- ratioNormalized
+    ratioToSeg <- ratioNormalized
   } else {
-    ratiotoSeg <- ratioCorrectedBias
+    ratioToSeg <- ratioCorrectedBias
   }
 
-  Seg <- createSegments(ratiotoSeg, segmentMethod)
+  if(verbose == TRUE) {
+    message("normalization finished.")
+#    message("str(ratioToSeg)=")
+#    str(ratioToSeg)
+#    message ("Unique ratioToSeg$Ratio$chr: ", paste(unique(ratioToSeg$Ratio$chr),collapse=', '))
+
+  }
 
 
-  if(verbose == TRUE) message("Segmentation finished.",
-                              "\nstr(Seg)=",str(Seg),
-                              # "\nhead(Seg)=",head(Seg),
-                              "\n")
+  Seg <- createSegments(ratioToSeg, segmentMethod,verbose=verbose)
+
+
+  if(verbose == TRUE) {
+    message("Segmentation finished.")
+#    message("str(Seg)=")
+#    str(Seg)
+#    message ("Unique Seg$segmentNormalized$chr: ", paste(unique(Seg$segmentNormalized$chr),collapse=', '))
+  }
 
   Segments <- singleCNreport(Seg, report = report, result.dir = result.dir, saveplot = saveplot,
            prefix = prefix, plotNormalized = plotNormalized, WGD = WGD, pos.prop.threhold = pos.prop.threhold,

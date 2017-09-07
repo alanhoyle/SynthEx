@@ -16,13 +16,25 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
     segment.data <- Segment$Ratio[, c("chr", "start", "end", "ratio")]
     segment.data$log2ratio <- round(log2(segment.data[, "ratio"] + 0.0001), 4)
   }
+
+  if (verbose == TRUE && 1==2) {
+    message("segments.chrom:")
+    str(segments.chrom)
+    message ("Unique segments.chrom$chr: ", paste(unique(segments.chrom$chr),collapse=', '))
+
+    message ("segment.data:")
+    str(segment.data)
+    message ("Unique segment.data$chr: ", paste(unique(segment.data$chr),collapse=', '))
+    message ("----------------------------")
+  }
+
   if (verbose == TRUE) message("CallWholeGenomeDoubling...")
 
 
   Segment$WholeGenomeDoubling <- CallWholeGenomeDoubling(segments.chrom, WGD = WGD,
                                                          pos.prop.threhold = pos.prop.threhold,
-                                                         pos.log2ratio.threhold = pos.log2ratio.threhold,
-                                                         verbose=F)$WholeGenomeDoubling
+                                                         pos.log2ratio.threhold = pos.log2ratio.threhold
+                                                         )$WholeGenomeDoubling
   bin.size <- segment.data[1, "end"] - segment.data[1, "start"] + 1
   maxlength <- tapply(segments.chrom$end, segments.chrom$chr, max)
   xmax <- sum(maxlength/bin.size) + 400
@@ -52,24 +64,25 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
 
     sub <- segments.chrom[segments.chrom$chr == l, ]
     sub.data <- segment.data[segment.data$chr == l, ]
-    if (l == 1 & verbose==TRUE ) {
+    if (l == 1 && verbose==TRUE && 1==2) {
       message ("  Got inside WHILE...",
                "\n  maxl= ",maxl,
-               "")
+               "str(sub):")
       str (sub)
     }
 
-   if (verbose == TRUE) {
+   if (verbose == TRUE && 1==2) {
      message ("iteration: ",l,"\n",
               "  str(sub): ",
               ""
      )
+
+     message ("Unique sub$chr: ", paste(unique(sub$chr),collapse=', '))
      str(sub)
      message ("  str(sub.data):",
               ""     )
      str(sub.data)
-#      message (levels(factor(sub.data$chr)))
-
+     message ("Unique sub.data$chr: ", paste(unique(sub.data$chr),collapse=', '))
    }
 
     durr = tryCatch({
@@ -91,11 +104,13 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
 
     order <- order + sub[dim(sub)[1], "end"]/bin.size
     abline(v = order, col = "gray", lty = "dashed", lwd = 2)
-    if(l == TargetAnnotations$numchrom){
-      text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, "X", font = 2)
-    } else {
-      text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, l, font = 2)
-    }
+    if(l == TargetAnnotations$numchrom)
+      { text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, "X", font = 2)
+      } else if (l == TargetAnnotations$numchrom + 1) {
+        text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, "Y", font = 2)
+      } else {
+        text(order-0.5*sub[dim(sub)[1], "end"]/bin.size, 2.8, l, font = 2)
+      }
   }
 
   if(Segment$WholeGenomeDoubling == TRUE){
@@ -116,6 +131,7 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
     segments.chrom <- segments.chrom[, c("chr", "start", "end", "log2ratio")]
     segments.chrom <- as.matrix(segments.chrom)
     segments.chrom[, 1] <- gsub("X", TargetAnnotations$numchrom, segments.chrom[, 1])
+    segments.chrom[, 1] <- gsub("Y", TargetAnnotations$numchrom + 1, segments.chrom[, 1])
     segments.chrom <- as.data.frame(segments.chrom)
     segments.chrom <- segments.chrom[segments.chrom$chr != "Y", ]
 
