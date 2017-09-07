@@ -34,15 +34,6 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
     ratioToSeg <- ratioCorrectedBias
   }
 
-  if(verbose == TRUE) {
-    message("normalization finished.")
-#    message("str(ratioToSeg)=")
-#    str(ratioToSeg)
-#    message ("Unique ratioToSeg$Ratio$chr: ", paste(unique(ratioToSeg$Ratio$chr),collapse=', '))
-
-  }
-
-
   Seg <- createSegments(ratioToSeg, segmentMethod,verbose=verbose)
 
 
