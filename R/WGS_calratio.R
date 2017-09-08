@@ -31,7 +31,7 @@ WGS_calratio <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
     ratio.IDs <- paste0(ratio.res[, "chr"], ":", ratio.res[, "start"])

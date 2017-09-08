@@ -5,7 +5,7 @@ createCentromereBins <- function(cytoband = NULL, bin.size = 100000, write = FAL
     cytoband <- CentromereAnnotations$cytoband
   }
 
-  cytoband[, 1] <- gsub("chr", "", cytoband[, 1])
+  cytoband[, 1] <- gsub("^chr", "", cytoband[, 1])
   centromere <- NULL
   allbins <- NULL
   for(i in c(1:TargetAnnotations$numchrom, "X")){

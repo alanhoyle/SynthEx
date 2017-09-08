@@ -130,8 +130,10 @@ singleCNreport <- function(Segment, report = FALSE, result.dir = NULL, saveplot 
 
     segments.chrom <- segments.chrom[, c("chr", "start", "end", "log2ratio")]
     segments.chrom <- as.matrix(segments.chrom)
-    segments.chrom[, 1] <- gsub("X", TargetAnnotations$numchrom, segments.chrom[, 1])
-    segments.chrom[, 1] <- gsub("Y", TargetAnnotations$numchrom + 1, segments.chrom[, 1])
+
+    segments.chrom[, 1] <- gsub("^X$", TargetAnnotations$numchrom, segments.chrom[, 1])
+    segments.chrom[, 1] <- gsub("^Y$", TargetAnnotations$numchrom + 1, segments.chrom[, 1])
+
     segments.chrom <- as.data.frame(segments.chrom)
     segments.chrom <- segments.chrom[segments.chrom$chr != "Y", ]
 

@@ -12,7 +12,7 @@ groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0
   for(i in 1:dim(samples)[1]){
     sample.name <- samples[i]
     message("Sample # ", i, ": ", sample.name)
-    sampleData <- read.table(file.path (sample.dirs[i], paste0("SampleSegmentInput-", segmentMethod, ".txt")), as.is = TRUE, sep = "\t", na.strings = "", header = T)
+    sampleData <- read.table(file.path (sample.dirs[i], paste0("SampleSegmentInput-", segmentMethod, ".txt")), stringsAsFactors = F, sep = "\t", na.strings = "", header = T)
     sampleData <- sampleData[order(sampleData$chr, sampleData$start, sampleData$end), ]
     data <- rbind(data, sampleData)
   }

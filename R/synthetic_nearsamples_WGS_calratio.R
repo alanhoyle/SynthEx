@@ -11,10 +11,9 @@ synthetic_nearsamples_WGS_calratio <-
     options(scipen = 50)
 
     tumor[, 1] <- gsub("^chr", "", tumor[, 1])
+    tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
+    tumor[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), tumor[, 1])
 
-
-    tumor[, 1] <-
-      gsub("X", toString(TargetAnnotations$numchrom), tumor[, 1])
     if (nrow(counts) != nrow(tumor)) {
       stop("Input data and \"counts\" size don't match!")
     }
@@ -60,7 +59,7 @@ synthetic_nearsamples_WGS_calratio <-
           eval(parse(text = ss))
         }
       } else {
-        centromere <- read.delim(centromereBins, header = F, as.is = T)
+        centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
       }
       centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
       ratio.IDs <-

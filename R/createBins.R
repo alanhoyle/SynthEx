@@ -1,7 +1,7 @@
 createBins <- function(binsize = 100000, chromLength = NULL, write = TRUE, result.dir = NULL, prefix = "hg19"){
   options(scipen = 50)
   if(!is.null(chromLength)){
-    x <- read.table(chromLength, as.is = T)
+    x <- read.table(chromLength, stringsAsFactors = F)
   } else {
     load(hg19.chromosome.size)
     x <- hg19.chromosome.size

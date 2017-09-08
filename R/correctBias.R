@@ -59,7 +59,7 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
       eval(parse(text=ss))
     }
   } else {
-    target <- read.delim(targetAnnotateBins, header = F, as.is = T)
+    target <- read.delim(targetAnnotateBins, header = F, stringsAsFactors = F)
   }
 
   target[, 5] <- target[, 5]+1

@@ -73,7 +73,7 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
       eval(parse(text=ss))
     }
   } else {
-    target <- read.delim(targetAnnotateBins, header = F, as.is = T)
+    target <- read.delim(targetAnnotateBins, header = F, stringsAsFactors = F)
   }
 
   if(substr(target[1, 4], 1, 3) == "chr") {

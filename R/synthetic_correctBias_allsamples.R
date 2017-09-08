@@ -4,10 +4,10 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
 
   options(scipen = 50)
 
-  if(substr(tumor[1, 1], 1, 3) == "chr") {
-    tumor[, 1] <- gsub("chr", "", tumor[, 1])
-  }
-  tumor[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), tumor[, 1])
+  tumor[, 1] <- gsub("^chr", "", tumor[, 1])
+  tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
+  tumor[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), tumor[, 1])
+
   if(nrow(counts) != nrow(tumor)){
     stop("Input data and \"counts\" size don't match!")
   }
@@ -47,7 +47,7 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere[, 2] <- centromere[, 2] + 1
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
@@ -67,7 +67,7 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
       eval(parse(text=ss))
     }
   } else {
-    target <- read.delim(targetAnnotateBins, header = F, as.is = T)
+    target <- read.delim(targetAnnotateBins, header = F, stringsAsFactors = F)
   }
 
   if(substr(target[1, 4], 1, 3) == "chr") {

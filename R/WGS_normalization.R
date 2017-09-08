@@ -5,35 +5,35 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
   options(scipen = 50)
   if(is.null(result.dir)) result.dir <- getwd()
   #ratio of tumor/normal coverage from bins
-  x <- read.delim(tumor.file, header = F, as.is = T)
-  colnames(x) <- c("chr", "start", "end", "reads")
-  if(substr(x[1, 1], 1, 3) == "chr") {
-    x[, 1] <- gsub("chr", "", x[, 1])
-  }
-  if(x[1, "end"] - x[1, "start"] != bin.size){
+  tumor.data <- read.delim(tumor.file, header = F, stringsAsFactors = F)
+  colnames(tumor.data) <- c("chr", "start", "end", "reads")
+
+  tumor.data[, 1] <- gsub("^chr", "", tumor.data[, 1])
+
+  if(tumor.data[1, "end"] - tumor.data[1, "start"] != bin.size){
     stop("\"bin.size\" should match with the input file!")
   }
 
-  y <- read.delim(normal.file, header = F, as.is = T)
+  y <- read.delim(normal.file, header = F, stringsAsFactors = F)
   colnames(y) <- c("chr", "start", "end", "reads")
-  factor <- sum(x[, "reads"])/sum(y[, "reads"])
+  factor <- sum(tumor.data[, "reads"])/sum(y[, "reads"])
 
   if(factor <= 0.75 | factor >= 1.5){
     y[, "normalized"] <- round(y[, "reads"]*factor, 3)
     y[y[, "normalized"] < reads.threshold, "normalized"] <- 0
-    ratio <- x[, "reads"]/y[, "normalized"]
+    ratio <- tumor.data[, "reads"]/y[, "normalized"]
   } else {
-    ratio <- x[, "reads"]/y[, "reads"]
+    ratio <- tumor.data[, "reads"]/y[, "reads"]
   }
   ratio[is.infinite(ratio) | is.nan(ratio)] <- NA
-  ratio.IDs <- paste0(x[, "chr"], ":", x[, "start"])
-  ratio.res <- data.frame(x[, c("chr", "start", "end")], ratio)
+  ratio.IDs <- paste0(tumor.data[, "chr"], ":", tumor.data[, "start"])
+  ratio.res <- data.frame(tumor.data[, c("chr", "start", "end")], ratio)
 
   if(rm.centromere == TRUE) {
     if(is.null(centromereBins)){
       load(centromere.annotations)
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
     ratio.IDs <- paste0(ratio.res[, "chr"], ":", ratio.res[, "start"])
@@ -58,16 +58,16 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
 
   ##########
   ##########
-  data <- read.delim(file.path (working.dir, "tumor.MAF.ratio.bed"), header = F)
-  if(substr(data[1, 1], 1, 3) == "chr") {
-    data[, 1] <- gsub("chr", "", data[, 1])
-  }
-  data <- data[data[, 1] %in% c(1:(TargetAnnotations$numchrom - 1)), ]
-  segments <- paste0(data[, 5], ":", data[, 6])
-  median.MAF <- tapply(data[, 4], segments, median)
+  tumor.maf.ratio <- read.delim(file.path (working.dir, "tumor.MAF.ratio.bed"), header = F)
+
+  tumor.maf.ratio[, 1] <- gsub("^chr", "", tumor.maf.ratio[, 1])
+
+  tumor.maf.ratio <- tumor.maf.ratio[tumor.maf.ratio[, 1] %in% c(1:(TargetAnnotations$numchrom - 1)), ]
+  segments <- paste0(tumor.maf.ratio[, 5], ":", tumor.maf.ratio[, 6])
+  median.MAF <- tapply(tumor.maf.ratio[, 4], segments, median)
   median.MAF.segments <- data.frame(names(median.MAF), median.MAF)
   colnames(median.MAF.segments) <- c("segments", "MAF")
-  ratio.segments <- data.frame(segments, data[, 8])
+  ratio.segments <- data.frame(segments, tumor.maf.ratio[, 8])
   ratio.segments <- ratio.segments[!duplicated(ratio.segments), ]
   colnames(ratio.segments) <- c("segments", "ratio")
   merged.segments <- merge(median.MAF.segments, ratio.segments, by.x = "segments", by.y = "segments")

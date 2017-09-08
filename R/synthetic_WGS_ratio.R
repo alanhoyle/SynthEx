@@ -3,10 +3,11 @@ synthetic_WGS_calratio <- function(tumor, counts, bin.size = 100000, rm.centrome
 
   options(scipen = 50)
   sampleData <- tumor
-  if(substr(sampleData[1, 1], 1, 3) == "chr") {
-    sampleData[, 1] <- gsub("chr", "", sampleData[, 1])
-  }
-  sampleData[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), sampleData[, 1])
+
+  sampleData[, 1] <- gsub("^chr", "", sampleData[, 1])
+  sampleData[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), sampleData[, 1])
+  sampleData[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), sampleData[, 1])
+
   if(nrow(counts) != nrow(sampleData)){
     stop("Input data and \"counts\" size don't match!")
   }
@@ -46,7 +47,7 @@ synthetic_WGS_calratio <- function(tumor, counts, bin.size = 100000, rm.centrome
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = T)
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
     ratio.IDs <- paste0(ratio.res[, "chr"], ":", ratio.res[, "start"])

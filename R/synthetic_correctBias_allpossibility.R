@@ -7,10 +7,10 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
   if(class(syntheticLibrary) != "syntheticLibrary")
     stop("Invalid class for syntheticLibrary!")
 
-  if(substr(tumor[1, 1], 1, 3) == "chr") {
-    tumor[, 1] <- gsub("chr", "", tumor[, 1])
-  }
-  tumor[, 1] <- gsub("X", toString(TargetAnnotations$numchrom), tumor[, 1])
+  tumor[, 1] <- gsub("^chr", "", tumor[, 1])
+
+  tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
+  tumor[, 1] <- gsub("^Y$", toString(TargetAnnotations$numchrom + 1), tumor[, 1])
 
   NumProtocol <- syntheticLibrary$NumProtocol
   all.variance <- NULL
@@ -68,7 +68,7 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
         eval(parse(text=ss))
       }
     } else {
-      centromere <- read.delim(centromereBins, header = F, as.is = c(T,F,F))
+      centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
     centromere[, 2] <- centromere[, 2] + 1
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
@@ -88,12 +88,12 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
       eval(parse(text=ss))
     }
   } else {
-    target <- read.delim(targetAnnotateBins, header = F, as.is = T)
+    target <- read.delim(targetAnnotateBins, header = F, stringsAsFactors = F)
   }
 
-  if(substr(target[1, 4], 1, 3) == "chr") {
-    target[, 4] <- gsub("chr", "", target[, 4])
-  }
+
+  target[, 4] <- gsub("^chr", "", target[, 4])
+
   target[, 5] <- target[, 5]+1
   target.IDs <- paste0(target[, 4], ":", target[, 5])
   target.IDs <- target.IDs[!duplicated(target.IDs)]
