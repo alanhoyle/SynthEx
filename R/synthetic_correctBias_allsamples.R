@@ -1,8 +1,16 @@
 synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, rm.centromere = TRUE,
                                      targetAnnotateBins = NULL, saveplot = TRUE, centromereBins = NULL, chrX = FALSE,
-                                     plot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50){
+                                     plot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
+                                     verbose = FALSE){
 
   options(scipen = 50)
+
+  if(verbose == TRUE && 1==2) {
+    message ("synthetic_correctBias_allsamples: str(tumor):")
+    str(tumor)
+#    message ("Unique tumor$chr: ", paste(unique(tumor$chr),collapse=', '))
+
+  }
 
   tumor[, 1] <- gsub("^chr", "", tumor[, 1])
   tumor[, 1] <- gsub("^X$", toString(TargetAnnotations$numchrom), tumor[, 1])
@@ -194,10 +202,14 @@ synthetic_correctBias_allsamples <- function(tumor, counts, bin.size = 100000, r
   ratio <- round(ratio/median(ratio, na.rm = T), 3)
   ratio.res[, "ratio"] <- ratio
 
+  ratio.bed = ratio.res
+
+  ratio.bed[, 2] -1
+
   if(!is.null(prefix)){
-    write.table(ratio.res, file.path (result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.bed, file.path (result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(ratio.res, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.bed, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   if(chrX == FALSE){

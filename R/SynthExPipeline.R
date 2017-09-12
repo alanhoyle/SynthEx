@@ -18,8 +18,8 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
 
   if(verbose == TRUE) {
     message("Bias correction finished.")
-#    message ("ratioCorrectedBias: ")
-#    str(ratioCorrectedBias)
+    message ("ratioCorrectedBias: ")
+    str(ratioCorrectedBias)
 #    message ("Unique ratioCorrectedBias$Ratio$chr: ", paste(unique(ratioCorrectedBias$Ratio$chr),collapse=', '))
 
   }

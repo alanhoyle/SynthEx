@@ -329,7 +329,7 @@ groupCNplots <- function(grps, sample.dirs, gain.thresh = 0.26, loss.thresh = -0
           gain.index <- gain.index + 1
         }
         if(totalChrLengths[tchr, 2] < sum(chr.gains.length[gain.first:(gain.index-1)])){
-          message ("Warning: Lenghts are longer than total chrom length for chrom ", tchr)
+          message ("Warning: Lengths are longer than total chrom length for chrom ", tchr)
           message ("					Chrom is ", totalChrLengths[tchr, 2], " bases")
           message ("					Calculated length is ", sum(chr.gains.length[gain.first:(gain.index-1)]))
 

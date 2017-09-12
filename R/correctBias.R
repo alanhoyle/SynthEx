@@ -1,7 +1,7 @@
 correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
                         targetAnnotateBins = NULL, centromereBins = NULL, chrX = FALSE, plot = TRUE,
                         saveplot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
-                        verbose=F){
+                        verbose = FALSE){
 
   options(scipen = 50)
 
@@ -191,10 +191,14 @@ correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
   ratio <- round(ratio/median(ratio, na.rm = T), 3)
   ratio.res[, "ratio"] <- ratio
 
+  ratio.bed = ratio.res
+
+  ratio.bed[, 2] -1
+
   if(!is.null(prefix)){
-    write.table(ratio.res, file.path (result.dir, paste0 (prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.bed, file.path (result.dir, paste0 (prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(ratio.res, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.bed, file.path (result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   if(chrX == FALSE){

@@ -68,7 +68,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
     normal[, 2] <- normal[, 2] + 1
 
 
-    if(ncol(normal) > 4){
+    if(ncol(normal) > 4){ # i.e. if there exists more than one sample in the BED-like normals matrix.
       if(K > 1){
         Corrected <- synthetic_correctBias_nearsamples(tumor, normal[, -c(1:3)], bin.size = bin.size, rm.centromere = rm.centromere, K = K,
                                                    targetAnnotateBins = targetAnnotateBins, saveplot = saveplot, centromereBins = centromereBins, chrX = chrX,

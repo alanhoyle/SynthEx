@@ -40,8 +40,11 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
     ratio.res <- ratio.res[! ratio.IDs%in%centromere.IDs, ]
   }
 
+  ratio.bed = ratio.res
 
-  write.table(ratio.res, file.path (result.dir, "adjusted.ratio.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
+  ratio.bed[, 2] -1
+
+  write.table(ratio.bed, file.path (result.dir, "adjusted.ratio.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
 
 
   ######### calculate MAF from VCF file #########

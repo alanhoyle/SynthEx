@@ -6,7 +6,8 @@ synthetic_nearsamples_WGS_calratio <-
            centromereBins = NULL,
            K = 5,
            reads.threshold = 50,
-           chrX = FALSE)
+           chrX = FALSE,
+           verbose = FALSE)
   {
     options(scipen = 50)
 
@@ -68,9 +69,13 @@ synthetic_nearsamples_WGS_calratio <-
     }
 
 
+    ratio.bed = ratio.res
+
+    ratio.bed[, 2] -1
+
     if (!is.null(prefix)) {
       write.table(
-        ratio.res,
+        ratio.bed,
         file.path (result.dir, paste0(prefix, "_Ratio.bed")),
         sep = "\t",
         quote = FALSE,
@@ -79,7 +84,7 @@ synthetic_nearsamples_WGS_calratio <-
       )
     } else {
       write.table(
-        ratio.res,
+        ratio.bed,
         file.path (result.dir, "Ratio.bed"),
         sep = "\t",
         quote = FALSE,

@@ -1,8 +1,16 @@
 synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin.size = 100000, rm.centromere = TRUE,
                                   targetAnnotateBins = NULL, saveplot = TRUE, centromereBins = NULL, chrX = FALSE,
-                                  write = FALSE, plot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50){
+                                  write = FALSE, plot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
+                                  verbose = FALSE){
 
   options(scipen = 50)
+
+  if(verbose == TRUE && 1==2) {
+    message ("synthetic_correctBias_allpossibility: str(tumor):")
+    str(tumor)
+    #    message ("Unique tumor$chr: ", paste(unique(tumor$chr),collapse=', '))
+
+  }
 
   if(class(syntheticLibrary) != "syntheticLibrary")
     stop("Invalid class for syntheticLibrary!")
@@ -214,10 +222,14 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
   ratio <- round(ratio/median(ratio, na.rm = T), 3)
   ratio.res[, "ratio"] <- ratio
 
+  ratio.bed = ratio.res
+
+  ratio.bed[, 2] -1
+
   if(!is.null(prefix)){
-    write.table(ratio.res, file.path(result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.bed, file.path(result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   } else {
-    write.table(ratio.res, file.path(result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+    write.table(ratio.bed, file.path(result.dir, "Ratio.bed"), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   }
 
   if(chrX == FALSE){

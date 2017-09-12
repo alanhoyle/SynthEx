@@ -1,4 +1,12 @@
-createSegments <- function(ratio, segmentMethod = c("CBS", "SomaticaEx", "TrendFiltering"),verbose=F){
+createSegments <- function(ratio, segmentMethod = c("CBS", "SomaticaEx", "TrendFiltering"),
+                           verbose = FALSE){
+
+  if(verbose == TRUE && 1==2) {
+    message ("createSegments: str(ratio):")
+    str(ratio)
+    #    message ("Unique tumor$chr: ", paste(unique(tumor$chr),collapse=', '))
+
+  }
 
   if(class(ratio) != "RatioNormalized")
     stop("Invalid input class for createSegments().")
