@@ -259,7 +259,7 @@ purityEstimate <- function(Segment, working.dir = NULL, result.dir = NULL,
 #    normallike <- FALSE
 #  }
 
-  reportname <- "SynthEx_sample_stats.bed"
+  reportname <- "SynthEx_sample_stats.txt"
   sampleinfo <- data.frame(Segment$PurityPloidy[c("Purity", "Ploidy")],
                            Segment$WholeGenomeDoubling, Segment$segmentMethod)
 

@@ -42,7 +42,7 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
 
   ratio.bed = ratio.res
 
-  ratio.bed[, 2] -1
+  ratio.bed[,2] = ratio.bed[, 2] -1
 
   write.table(ratio.bed, file.path (result.dir, "adjusted.ratio.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
 

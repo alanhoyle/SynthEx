@@ -1,12 +1,9 @@
 synthetic_nearsamples_WGS_calratio <-
-  function(tumor,
-           counts,
+  function(tumor, counts,
            bin.size = 100000,
-           rm.centromere = TRUE,
-           centromereBins = NULL,
+           rm.centromere = TRUE, centromereBins = NULL,
            K = 5,
-           reads.threshold = 50,
-           chrX = FALSE,
+           reads.threshold = 50, chrX = FALSE,
            verbose = FALSE)
   {
     options(scipen = 50)
@@ -71,25 +68,15 @@ synthetic_nearsamples_WGS_calratio <-
 
     ratio.bed = ratio.res
 
-    ratio.bed[, 2] -1
+    ratio.bed[,2] = ratio.bed[, 2] -1
 
     if (!is.null(prefix)) {
-      write.table(
-        ratio.bed,
-        file.path (result.dir, paste0(prefix, "_Ratio.bed")),
-        sep = "\t",
-        quote = FALSE,
-        col.names = TRUE,
-        row.names = FALSE
+      write.table(ratio.bed, file.path (result.dir, paste0(prefix, "_Ratio.bed")),
+        sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE
       )
     } else {
-      write.table(
-        ratio.bed,
-        file.path (result.dir, "Ratio.bed"),
-        sep = "\t",
-        quote = FALSE,
-        col.names = TRUE,
-        row.names = FALSE
+      write.table(ratio.bed, file.path (result.dir, "Ratio.bed"),
+        sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE
       )
     }
 
