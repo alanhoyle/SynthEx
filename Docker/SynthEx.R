@@ -51,7 +51,7 @@ option_list <- list (
                      make_option (c("-d","--debug"),
                                   action="store_true",
                                   default=FALSE,
-                                  help="Enable Debugging options"),
+                                  help="Enable Debugging options")
     )
 
 
