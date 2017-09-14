@@ -54,9 +54,9 @@ synthetic_WGS_calratio <- function(tumor, counts, bin.size = 100000, rm.centrome
     ratio.res <- ratio.res[! ratio.IDs%in%centromere.IDs, ]
   }
 
-  ratio.bed = ratio.res
+  ratio.bed <- ratio.res
 
-  ratio.bed[,2] = ratio.bed[, 2] -1
+  ratio.bed[,2] <- ratio.bed[, 2] -1
 
   if(!is.null(prefix)){
     write.table(ratio.bed, file.path (result.dir, paste0(prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)

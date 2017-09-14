@@ -30,7 +30,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
   # discard all entries that are not numeric since I just converted X and Y to numbers right above
   suppressWarnings (
       {
-        tumor =  tumor[!is.na(as.integer(tumor[,1])), ]
+        tumor <-  tumor[!is.na(as.integer(tumor[,1])), ]
       }
     )
 
@@ -52,7 +52,7 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
 
     suppressWarnings (
       {
-        normal = normal[!is.na(as.integer(normal[,1])), ]
+        normal <- normal[!is.na(as.integer(normal[,1])), ]
       }
     )
 

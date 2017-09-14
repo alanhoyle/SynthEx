@@ -59,23 +59,23 @@ opt  <- parse_args(OptionParser(#usage= "usage: %prog [options]",
                                 option_list=option_list)
                    )
 
-bin.size = opt$bin
+bin.size <- opt$bin
 
-chrX=opt$includexy
+chrX <- opt$includexy
 
 intersectBed.dir <- system("which intersectBed", intern=TRUE)
 
 if (is.null(intersectBed.dir)) stop ("Can't find intersectBed")
 
-datalist = data()$results
+datalist <- data()$results
 
 if (opt$annotation == "") {
 
   data ("TargetAnnotations")
 } else if (file.exists (opt$annotation)) {
-    load (file=opt$annotation)
+    load (file = opt$annotation)
 } else {
-    tryCatch (data(package='SynthEx', list=opt$annotation))
+    tryCatch (data (package = 'SynthEx', list=opt$annotation))
 #} else {
 #  stop("Can't find target annotations for ",opt$annotation,".")
 
@@ -149,7 +149,7 @@ if (is.null(eval (parse(text=paste0("CentromereAnnotations$bin", bin.size))))) {
 }
 
 if (!("numchrom" %in% names(TargetAnnotations))) {
-  TargetAnnotations$numchrom = 23
+  TargetAnnotations$numchrom <- 23
   warning("Can't find TargetAnnotations$numchrom.  Assuming human with default value of ",  TargetAnnotations$numchrom )
 }
 

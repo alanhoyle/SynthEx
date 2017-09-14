@@ -18,7 +18,7 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
 
   suppressWarnings (
     {
-      tumor = tumor[!is.na(as.integer(tumor[,1])), ]
+      tumor <- tumor[!is.na(as.integer(tumor[,1])), ]
     }
   )
   if(nrow(counts) != nrow(tumor)){
@@ -207,9 +207,9 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
   ratio <- round(ratio/median(ratio, na.rm = T), 3)
   ratio.res[, "ratio"] <- ratio
 
-  ratio.bed = ratio.res
+  ratio.bed <- ratio.res
 
-  ratio.bed[,2] = ratio.bed[, 2] -1
+  ratio.bed[,2] <- ratio.bed[, 2] -1
 
   if(!is.null(prefix)){
     write.table(ratio.bed, file.path (result.dir, paste0( prefix, "_Ratio.bed")), sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
