@@ -12,8 +12,8 @@ RUN Rscript -e 'install.packages (c("mclust","flsa","foreach","ggplot2","gridExt
     && Rscript -e 'source("https://bioconductor.org/biocLite.R");biocLite(); biocLite("DNAcopy");' \
     && Rscript -e 'library(devtools) ;'
 
-ADD https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz bedtools-2.26.0.tar.gz
-RUN tar zxf bedtools-2.26.0.tar.gz && cd bedtools2 && make && make install
+ADD https://github.com/arq5x/bedtools2/releases/download/v2.27.0/bedtools-2.27.0.tar.gz bedtools.tar.gz
+RUN tar zxf bedtools.tar.gz && cd bedtools2 && make && make install
 
 RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx@parameterizeTarget");'
 # RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx");'
