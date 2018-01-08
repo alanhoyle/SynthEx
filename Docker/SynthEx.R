@@ -21,15 +21,15 @@ option_list <- list (
 
                      make_option (c("-o","--outdir"),
                                   default=".",
-                                  help="the output directory [default %default]"),
+                                  help="The output directory [default %default]"),
 
                      make_option (c("-T","--tmpdir"),
                                   default=tempdir(),
-                                  help="the temporary directory [default %default]"),
+                                  help="The temporary directory [default %default]"),
 
                      make_option (c("-k","--numnormals"),
-                                  default="4",
-                                  help="the number of normals to use for normalization [default %default]"),
+                                  default="10",
+                                  help="The number of normals to use for normalization [default %default]"),
 
                      make_option (c("-b","--bin"),
                                   default=50000,
@@ -37,11 +37,11 @@ option_list <- list (
 
                      make_option (c("-a","--annotation"),
                                   default="",
-                                  help="an RData file for the target annotations [default is based on SureSelect with hg19]"),
+                                  help="An RData file for the target annotations [default is based on SureSelect with hg19]"),
 
                      make_option (c("-C","--centromeres"),
                                   default="",
-                                  help="an RData file for the centromere annotations [default is based on hg19]"),
+                                  help="An RData file for the centromere annotations [default is based on hg19]"),
 
                      make_option (c("-X","--includexy"),
                                   action="store_true",
