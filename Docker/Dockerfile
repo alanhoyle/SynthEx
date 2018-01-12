@@ -16,8 +16,8 @@ RUN Rscript -e 'install.packages (c("mclust","flsa","foreach","ggplot2","gridExt
 ADD https://github.com/arq5x/bedtools2/releases/download/v2.27.0/bedtools-2.27.0.tar.gz bedtools.tar.gz
 RUN tar zxf bedtools.tar.gz && cd bedtools2 && make && make install
 
-RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx@parameterizeTarget");'
-# RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx");'
+#RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx@parameterizeTarget");'
+RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx");'
 
 
 # Clean up APT when done.
