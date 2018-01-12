@@ -37,7 +37,7 @@ option_list <- list (
 
                      make_option (c("-a","--annotation"),
                                   default="",
-                                  help="An RData file for the target annotations [default is based on SureSelect with hg19]"),
+                                  help="An RData file for the target annotations [default is based on Agilent SureSelect with hg19]"),
 
                      make_option (c("-C","--centromeres"),
                                   default="",
@@ -69,6 +69,13 @@ if (is.null(intersectBed.dir)) stop ("Can't find intersectBed")
 
 datalist <- data()$results
 
+if (opt$annotation == "mm10") {
+  opt$annotation <- "TargetAnnotations.mm10.gencode_vm12"
+  if (opt$centromeres == "") {
+    opt$centromeres <- "CentromereAnnotations.mm10"
+  }
+}
+
 if (opt$annotation == "") {
 
   data ("TargetAnnotations")
@@ -81,7 +88,7 @@ if (opt$annotation == "") {
 
 }
 
-message("Using Target ",TargetAnnotations$genome,":",TargetAnnotations$Description,".")
+message("Using Target ",TargetAnnotations$genome,": ",TargetAnnotations$Description,".")
 
 if (opt$centromeres == "") {
 
@@ -90,12 +97,8 @@ if (opt$centromeres == "") {
   load (file=opt$centromeres)
 } else  {
   tryCatch (data(list=opt$centromeres))
-#} else {
-#  stop("Can't find centromeres for ",opt$centromeres,".")
 
 }
-
-# message("Using centromeres ",opt$centromeres,".")
 
 working.dir <- opt$tmpdir
 dir.create(working.dir,showWarnings = FALSE)
@@ -103,11 +106,7 @@ dir.create(working.dir,showWarnings = FALSE)
 result.dir <- opt$outdir
 dir.create(result.dir,showWarnings = FALSE)
 
-
-
-
 tumor.file <- opt$tumor
-
 normal.file <- opt$normal
 
 sample.name <- opt$samplename
@@ -115,8 +114,12 @@ genotype.file <- opt$genotype
 numnormals <- opt$numnormals
 
 debug <- opt$debug
+
 if (debug) {
-    message ("bin.size:", bin.size,"\n","tumor.file:",tumor.file,"\nnormal.file:",normal.file,"\ngenotype.file: ",genotype.file,"\n")
+    message ("bin.size:", bin.size,"\n",
+             "tumor.file:", tumor.file,"\n",
+             "normal.file:", normal.file,"\n",
+             "genotype.file: ",genotype.file,"\n")
 }
 
 
@@ -127,11 +130,6 @@ if(!file.exists (tumor.file)) {
 if(!file.exists (normal.file)) {
   stop("Can't find normal file: ",normal.file)
 }
-
-
-#ss <- paste0("centromere <- CentromereAnnotations$bin", bin.size)
-#eval(parse(text=ss))
-
 
 if (is.null(eval (parse(text=paste0("TargetAnnotations$bin", bin.size))))) {
   message ("Generating target bins for size ",bin.size,".")
@@ -155,15 +153,18 @@ if (!("numchrom" %in% names(TargetAnnotations))) {
 
 
 message ("------Running SynthExPipeline------")
-system.time (Segfrompipe <- SynthExPipeline (tumor.file,normal.file,
-                                bin.size=bin.size,
-                                intersectBed.dir,
-                                genotype.file=genotype.file,
-                                result.dir,working.dir,
-                                prefix=sample.name,
-                                verbose=debug,
-                                chrX=chrX,
-                                K=numnormals)
+system.time (Segfrompipe <- SynthExPipeline (
+  tumor.file,
+  normal.file,
+  bin.size=bin.size,
+  intersectBed.dir,
+  genotype.file=genotype.file,
+  result.dir,working.dir,
+  prefix=sample.name,
+  verbose=debug,
+  chrX=chrX,
+  K=numnormals
+  )
 )
 
 message ("------Finished running SynthExPipeline------\n")

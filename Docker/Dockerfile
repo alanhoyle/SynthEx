@@ -7,6 +7,7 @@ LABEL maintainer "alanh@unc.edu"
 
 RUN apt-get update && apt-get install -y build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev r-base git
 
+
 RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://archive.linux.duke.edu/cran'; options(repos = r);" > ~/.Rprofile
 RUN Rscript -e 'install.packages (c("mclust","flsa","foreach","ggplot2","gridExtra","inline","Rcpp","devtools","optparse")); ' \
     && Rscript -e 'source("https://bioconductor.org/biocLite.R");biocLite(); biocLite("DNAcopy");' \
