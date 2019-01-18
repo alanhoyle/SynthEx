@@ -1,30 +1,39 @@
-FROM ubuntu:16.10
+from rocker/r-base
 
-LABEL maintainer "alanh@unc.edu"
-
-
-# ...put your own build instructions here...
-
-RUN apt-get update && apt-get install -y build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev r-base git
+run apt-get update
+run apt-get install -t unstable -y libcurl4-openssl-dev  libssl-dev python
+# run R -e "install.packages('devtools')"
+MAINTAINER Alan Hoyle <alanh@unc.edu
 
 
-RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://archive.linux.duke.edu/cran'; options(repos = r);" > ~/.Rprofile
-RUN Rscript -e 'install.packages (c("mclust","flsa","foreach","ggplot2","gridExtra","inline","Rcpp","devtools","optparse")); ' \
-    && Rscript -e 'source("https://bioconductor.org/biocLite.R");biocLite(); biocLite("DNAcopy");' \
-    && Rscript -e 'library(devtools) ;'
+#RUN git clone https://github.com/ropensci/git2r.git &&\
+#R CMD INSTALL --configure-args="--with-libssl-include=/usr/lib/" git2r &&\
+#rm -rf git2r /tmp/*
 
-ADD https://github.com/arq5x/bedtools2/releases/download/v2.27.0/bedtools-2.27.0.tar.gz bedtools.tar.gz
-RUN tar zxf bedtools.tar.gz && cd bedtools2 && make && make install
+ENV bedtools_version 2.27.1
 
-#RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx@parameterizeTarget");'
-RUN Rscript -e  'source("https://install-github.me/r-lib/remotes"); remotes::install_github("alanhoyle/SynthEx");'
+ADD https://github.com/arq5x/bedtools2/releases/download/v${bedtools_version}/bedtools-${bedtools_version}.tar.gz /tmp/
 
+RUN cd /tmp/ \
+    && tar xzvf bedtools-${bedtools_version}.tar.gz \
+    && cd bedtools2 \
+    && make \
+    && make install \
+    && rm /tmp/bedtools-${bedtools_version}.tar.gz \
+    && rm -rf /tmp/bedtools2/test \
+    && rm -rf /tmp/bedtools2/src \
+    && rm -rf /tmp/bedtools2/docs
 
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /bedtools*
+RUN R -q -e "install.packages(c('devtools', 'covr', 'roxygen2', 'testthat','optparse'), repos = 'https://cloud.r-project.org/')" &&\
+rm -rf /tmp/*
+
+RUN Rscript -e ' install.packages("BiocManager", repos = "https://cloud.r-project.org/") ; BiocManager::install() ; BiocManager::install("DNAcopy")'
+RUN Rscript -e 'devtools::install_github("alanhoyle/SynthEx")'
 
 COPY Rprofile.site /etc/R/
 COPY SynthEx.R /SynthEx.R
 
 ENTRYPOINT ["Rscript", "/SynthEx.R"]
 CMD ["--help"]
+
+# CMD ["R"]
