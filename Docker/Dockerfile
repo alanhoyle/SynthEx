@@ -1,14 +1,11 @@
-from rocker/r-base
+FROM rocker/r-ver:3.5.2
+# FROM rocker/r-base:latest
 
-run apt-get update
-run apt-get install -t unstable -y libcurl4-openssl-dev  libssl-dev python
-# run R -e "install.packages('devtools')"
-MAINTAINER Alan Hoyle <alanh@unc.edu
+LABEL maintainer="Alan Hoyle <alanh@unc.edu>"
+LABEL description="The SynthEx Copy Number Variant caller"
 
-
-#RUN git clone https://github.com/ropensci/git2r.git &&\
-#R CMD INSTALL --configure-args="--with-libssl-include=/usr/lib/" git2r &&\
-#rm -rf git2r /tmp/*
+RUN apt-get update
+RUN apt-get install -y libcurl4-openssl-dev  libssl-dev python zlib1g-dev
 
 ENV bedtools_version 2.27.1
 
