@@ -205,7 +205,7 @@ synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, 
   ratio <- ifelse(!is.na(ratio) & !is.nan(ratio) & ratio < 0, 0, ratio)
   ratio[is.infinite(ratio) | is.nan(ratio)] <- NA
   ###ratio <- round(ratio/median(ratio, na.rm = T), 3)
-  ###ratio <- ratio/median(ratio[is.finite(ratio) & ratio != 0], na.rm = T)
+  ratio <- ratio/median(ratio[is.finite(ratio) & ratio != 0], na.rm = T)
   ratio.res[, "ratio"] <- ratio
 
   ratio.bed <- ratio.res
