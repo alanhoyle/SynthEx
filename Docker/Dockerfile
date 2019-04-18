@@ -25,7 +25,7 @@ RUN R -q -e "install.packages(c('devtools', 'covr', 'roxygen2', 'testthat','optp
 rm -rf /tmp/*
 
 RUN Rscript -e ' install.packages("BiocManager", repos = "https://cloud.r-project.org/") ; BiocManager::install() ; BiocManager::install("DNAcopy")'
-RUN Rscript -e 'devtools::install_github("thesushantpatil/SynthEx")'
+RUN Rscript -e 'devtools::install_github("alanhoyle/SynthEx")'
 
 COPY Rprofile.site /etc/R/
 COPY SynthEx.R /SynthEx.R
