@@ -45,7 +45,7 @@ option_list <- list (
 
                      make_option ("--saveann",
                                   default="",
-                                  help="with --bed, save filename for the target annotations .rData file")
+                                  help="with --bed, save filename for the target annotations .rData file"),
 
                      make_option (c("-C","--centromeres"),
                                   default="",
