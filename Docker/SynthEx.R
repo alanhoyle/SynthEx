@@ -39,6 +39,14 @@ option_list <- list (
                                   default="",
                                   help="An RData file for the target annotations [default is based on Agilent SureSelect with hg19]"),
 
+                     make_option (c("-B","--bed"),
+                                  default="",
+                                  help="A bed file to use to build target annotations [mutually exclusive with --annotation, default=NULL]"),
+
+                     make_option ("--saveann",
+                                  default="",
+                                  help="with --bed, save filename for the target annotations .rData file")
+
                      make_option (c("-C","--centromeres"),
                                   default="",
                                   help="An RData file for the centromere annotations [default is based on hg19]"),
@@ -78,9 +86,24 @@ if (opt$annotation == "mm10") {
 
 if (opt$annotation == "") {
 
-  data ("TargetAnnotations")
+  if (opt$bed == "") {
+    data ("TargetAnnotations")
+  } else if (file.exists(opt$bed)){
+      TargetAnnotations = createTargetAnnotations(
+        TargetBedFileName = opt$bed,
+        genome = "unspecified",
+        description = "",
+        savefile = opt$saveann
+        )
+
+  } else {
+      warning("--annotation not specified, and --bed ",opt$bed," does not exist.  using default")
+      data ("TargetAnnotations")
+    }
 } else if (file.exists (opt$annotation)) {
+    if (!opt$bed == "") { warning("both --annotation and --bed specified, using --annotation ",opt$annotation)}
     load (file = opt$annotation)
+
 } else {
     tryCatch (data (package = 'SynthEx', list=opt$annotation))
 #} else {
