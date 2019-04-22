@@ -118,6 +118,10 @@ if (opt$centromeres == "") {
   data ("CentromereAnnotations")
 } else if (file.exists (opt$centromeres)) {
   load (file=opt$centromeres)
+} else if (opt$centromeres == "GRCh38" || opt$centromeres == "hg38") {
+  data("CentromereAnnotations.GRCh38")
+
+
 } else  {
   tryCatch (data(list=opt$centromeres))
 
