@@ -30,7 +30,5 @@ RUN Rscript -e 'devtools::install_github("alanhoyle/SynthEx")'
 COPY Rprofile.site /etc/R/
 COPY SynthEx.R /SynthEx.R
 
-ENTRYPOINT ["Rscript", "/SynthEx.R"]
-CMD ["--help"]
+CMD ["Rscript", "/SynthEx.R", "--help"]
 
-# CMD ["R"]
