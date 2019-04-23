@@ -48,7 +48,7 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
 
 
   ######### calculate MAF from VCF file #########
-  ff <- paste0("cat ", genotype.file, " | python ", freebayes_to_bed, " ", cutoff, " 0.05  > ",
+  ff <- paste0("cat ", genotype.file, " | python ", vcf_to_bed, " ", cutoff, " 0.05  > ",
                file.path (working.dir, "tumor.MAF.highcut.bed"))
   system(ff)
 
