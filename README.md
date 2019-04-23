@@ -7,7 +7,7 @@ It is tailored to cater for the multiple characteristics of different next gener
 
 ### Pre-processing and preparation
 
-**SynthEx** takes counts data in non-overlapping genomic bins from tumor and normal samples as input. It  has  the  option  to  input  variant  calling  results  from  tumor  sample.   Thus **SynthEx** relies  on other tools to generate appropriate input files. We recommend **BEDtools** to get the bin-level count data and freebayes for variant calling.  In addition, **SynthEx** calls the **intersectBed** function from **BEDtools** directly, so **BEDtools** should be installed.  The helper function to process VCF files is written in **python**. So make sure **python** is installed on the system if applying the script.
+**SynthEx** takes counts data in non-overlapping genomic bins from tumor and normal samples as input. It has the option to input  variant calling results from tumor sample.  Thus **SynthEx** relies on other tools to generate appropriate input files. We recommend **BEDtools** to get the bin-level count data and Freebayes or Strelka2 (in germline mode) for variant calling.  In addition, **SynthEx** calls the **intersectBed** function from **BEDtools** directly, so **BEDtools** should be installed.  The helper function to process VCF files is written in **python**. So make sure **python** is installed on the system if applying the script.
 
 ### Installation
 

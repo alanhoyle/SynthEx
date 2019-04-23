@@ -2,7 +2,7 @@ normalization <- function(ratioCorrectedBias, bedTools.dir, genotype.file, vcf =
                           result.dir = NULL, cutoff = 20, plot = TRUE, saveplot = FALSE,
                           prefix = NULL, adjust.cutoff = 1.2, seg.count = 200){
 
-  freebayes_to_bed <- system.file("doc", "freebayes_to_bed.py", package="SynthEx")
+  vcf_to_bed <- system.file("doc", "vcf_to_bed.py", package="SynthEx")
 
   options(scipen = 50)
   if(is.null(result.dir)) result.dir <- "result"
@@ -17,7 +17,7 @@ normalization <- function(ratioCorrectedBias, bedTools.dir, genotype.file, vcf =
 
   if(vcf==TRUE) {
     ######### calculate MAF from VCF file #########
-    ff <- paste0("cat ", genotype.file, " | python ", freebayes_to_bed, " ", cutoff, " 0.05  > ", file.path (working.dir, "tumor.MAF.highcut.bed"))
+    ff <- paste0("cat ", genotype.file, " | python ", vcf_to_bed, " ", cutoff, " 0.05  > ", file.path (working.dir, "tumor.MAF.highcut.bed"))
     system(ff)
     ######## Creates the intersect(using intersectBed) of MAF + adjusted bin ratios
     ff <- paste0(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed")," -b ", file.path (working.dir, "Ratio.bed"),

@@ -30,7 +30,7 @@ createTargetBins <- function(Target, bin.size) {
     data.frame(res[i, 1:4], atarget, atarget + bin.size, row.names = NULL)
 
   })
-  head(x)
+
   all <- data.table::setDF(data.table::rbindlist(x))
 
   colnames(all) <- paste0("V", 1:6)

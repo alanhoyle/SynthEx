@@ -7,11 +7,11 @@ createTargetAnnotations <- function(TargetBedFileName,
   {
 
     message("Creating new TargetAnnotations:")
-    message ("   BEDfile:",TargetBedFileName)
-    message ("   Description:",description)
-    message ("   genome:",genome)
-    message ("   numchrom:",numchrom)
-    message ("   bins:",bins)
+    message ("   BEDfile: ",TargetBedFileName)
+    message ("   Description: ",description)
+    message ("   genome: ",genome)
+    message ("   numchrom: ",numchrom)
+    message ("   bins: ",paste0 (bins, sep = " "))
 
     NewTarget <- list()
     NewTarget$genome <- genome
@@ -24,7 +24,7 @@ createTargetAnnotations <- function(TargetBedFileName,
 
     for (binsize in bins)
       {
-      message ("      Creating annotations for binsize:",binsize)
+      message ("      Creating annotations for binsize: ",binsize)
       NewTarget[[ paste0( "bin", format( binsize, scientific = FALSE )) ]]  <-
         createTargetBins(Target = NewTarget$Target, bin.size = binsize)
     }
