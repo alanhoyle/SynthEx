@@ -13,16 +13,12 @@ It is tailored to cater for the multiple characteristics of different next gener
 
 **SynthEx** relies on the following R packages: **mclust**, **flsa**, **foreach**, **DNAcopy**, **ggplot2**, **gridExtra**, **inline**, and **Rcpp**. Among these, **DNAcopy** is hosted on BioConductor and all the others are hosted on CRAN. 
   ```R
-  install.packages ("mclust")
-  install.packages ("flsa")
-  install.packages ("foreach")
-  install.packages ("ggplot2")
-  install.packages ("gridExtra")
-  install.packages ("inline")
-  install.packages ("Rcpp")
-  source("https://bioconductor.org/biocLite.R")
-  biocLite()
-  biocLite("DNAcopy")
+ install.packages(c('devtools', 'covr', 'roxygen2', 'testthat','optparse'))
+
+ install.packages("BiocManager")
+ BiocManager::install() 
+ BiocManager::install("DNAcopy")
+ 
   ```
 
 **SynthEx** can be installed from github directly as follows:
