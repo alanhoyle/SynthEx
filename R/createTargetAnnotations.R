@@ -11,6 +11,12 @@ createTargetAnnotations <- function(TargetBedFileName,
     message ("   Description: ",description)
     message ("   genome: ",genome)
     message ("   numchrom: ",numchrom)
+
+    if (grepl ('mm', genome) && numchrom != 20) {
+      message ("     Looks like mouse:  are you sure you don't want 20 chromosomes for ", genome,"?")
+    } else if ((grepl ('hg', genome)|| grepl ('GRCh',genome)) && numchrom !=23) {
+      message ("     Looks like human:  are you sure you don't want 23 chromosomes for ", genome,"?")
+    }
     message ("   bins: ",paste0 (bins, sep = " "))
 
     NewTarget <- list()
