@@ -1,5 +1,6 @@
 from __future__ import print_function
 import re
+import os 
 import sys
 
 def eprint(*args, **kwargs):
@@ -17,10 +18,12 @@ def get_sample_info(sample_format, format_map):
     return sample_info
 
 if len(sys.argv) < 3:
-    eprint ("ERROR:",sys.argv[0], "requires two numeric parameters at the command line. ")
+    eprint ("ERROR:",os.path.basename(__file__), "requires two numeric parameters at the command line. ")
     eprint ("USAGE: ")
-    eprint ("   ",sys.argv[0], "$MIN_READ_DEPTH $MIN_ALLELE_FREQUENCY")
+    eprint ("   ",os.path.basename(__file__), "$MIN_READ_DEPTH $MIN_ALLELE_FREQUENCY")
     sys.exit(1)
+
+eprint("Processing germline VCF input with",os.path.basename(__file__))
 
 min_read_depth = float(sys.argv[1])
 min_AF = float(sys.argv[2])
