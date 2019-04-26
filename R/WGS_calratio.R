@@ -1,5 +1,5 @@
 WGS_calratio <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
-                 centromereBins = NULL, reads.threshold = 50, chrX = FALSE){
+                 centromereBins = NULL, reads.threshold = 50, chrX = TRUE){
 
   options(scipen = 50)
 

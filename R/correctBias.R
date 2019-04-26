@@ -1,5 +1,5 @@
 correctBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE,
-                        targetAnnotateBins = NULL, centromereBins = NULL, chrX = FALSE, plot = TRUE,
+                        targetAnnotateBins = NULL, centromereBins = NULL, chrX = TRUE, plot = TRUE,
                         saveplot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
                         verbose = FALSE){
 

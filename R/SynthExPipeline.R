@@ -1,7 +1,7 @@
 SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file,
                             result.dir = NULL, working.dir = NULL, verbose = FALSE,
                             saveplot = TRUE, plotNormalized = TRUE,
-                            rm.centromere = TRUE, targetAnnotateBins = NULL, centromereBins = NULL, chrX = FALSE,
+                            rm.centromere = TRUE, targetAnnotateBins = NULL, centromereBins = NULL, chrX = TRUE,
                             report = TRUE, plot = TRUE, prefix = NULL, reads.threshold = 25, vcf = TRUE,
                             adjust.cutoff = 1.2, seg.count = 200, segmentMethod = "CBS",
                             smoothk = 10, ratio.cutoff = 0.05, K = 1,

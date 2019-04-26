@@ -3,7 +3,7 @@ synthetic_nearsamples_WGS_calratio <-
            bin.size = 100000,
            rm.centromere = TRUE, centromereBins = NULL,
            K = 5,
-           reads.threshold = 50, chrX = FALSE,
+           reads.threshold = 50, chrX = TRUE,
            verbose = FALSE)
   {
     options(scipen = 50)

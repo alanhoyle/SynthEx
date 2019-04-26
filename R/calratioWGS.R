@@ -1,5 +1,5 @@
 calratioWGS <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE, K = 1,
-            centromereBins = NULL, chrX = FALSE, reads.threshold = 25){
+            centromereBins = NULL, chrX = TRUE, reads.threshold = 25){
 
   options(scipen = 50)
   if(is.null(result.dir)) result.dir <- "result"
