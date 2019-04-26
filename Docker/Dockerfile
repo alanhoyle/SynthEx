@@ -7,19 +7,9 @@ LABEL description="The SynthEx Copy Number Variant caller"
 RUN apt-get update
 RUN apt-get install -y libcurl4-openssl-dev  libssl-dev python zlib1g-dev
 
-ENV bedtools_version 2.27.1
+ENV bedtools_version 2.28.0
 
-ADD https://github.com/arq5x/bedtools2/releases/download/v${bedtools_version}/bedtools-${bedtools_version}.tar.gz /tmp/
-
-RUN cd /tmp/ \
-    && tar xzvf bedtools-${bedtools_version}.tar.gz \
-    && cd bedtools2 \
-    && make \
-    && make install \
-    && rm /tmp/bedtools-${bedtools_version}.tar.gz \
-    && rm -rf /tmp/bedtools2/test \
-    && rm -rf /tmp/bedtools2/src \
-    && rm -rf /tmp/bedtools2/docs
+ADD https://github.com/arq5x/bedtools2/releases/download/v${bedtools_version}/bedtools /usr/local/bin
 
 RUN R -q -e "install.packages(c('devtools', 'covr', 'roxygen2', 'testthat','optparse'), repos = 'https://cloud.r-project.org/')" &&\
 rm -rf /tmp/*
