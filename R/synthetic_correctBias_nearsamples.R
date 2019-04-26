@@ -1,5 +1,5 @@
 synthetic_correctBias_nearsamples <- function(tumor, counts, bin.size = 100000, rm.centromere = TRUE, K = 5,
-                                             targetAnnotateBins = NULL, saveplot = TRUE, centromereBins = NULL, chrX = FALSE,
+                                             targetAnnotateBins = NULL, saveplot = TRUE, centromereBins = NULL, chrX = TRUE,
                                              plot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
                                              verbose = FALSE){
 

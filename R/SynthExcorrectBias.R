@@ -1,5 +1,5 @@
 SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE, K = 1,
-                             targetAnnotateBins = NULL, saveplot = FALSE, centromereBins = NULL, chrX = FALSE,
+                             targetAnnotateBins = NULL, saveplot = FALSE, centromereBins = NULL, chrX = TRUE,
                              plot = TRUE, result.dir = NULL, working.dir = NULL, prefix = NULL, reads.threshold = 25,
                              verbose=FALSE){
   options(scipen = 50)

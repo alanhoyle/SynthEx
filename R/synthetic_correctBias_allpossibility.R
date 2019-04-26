@@ -1,5 +1,5 @@
 synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin.size = 100000, rm.centromere = TRUE,
-                                  targetAnnotateBins = NULL, saveplot = TRUE, centromereBins = NULL, chrX = FALSE,
+                                  targetAnnotateBins = NULL, saveplot = TRUE, centromereBins = NULL, chrX = TRUE,
                                   write = FALSE, plot = TRUE, result.dir = NULL, prefix = NULL, reads.threshold = 50,
                                   verbose = FALSE){
 

@@ -51,10 +51,10 @@ option_list <- list (
                                   default="",
                                   help="An RData file for the centromere annotations [default is based on hg19]"),
 
-                     make_option (c("-X","--includexy"),
-                                  action="store_true",
-                                  default=FALSE,
-                                  help="Include the X and Y chromosomes in segment output"),
+                     make_option (c("-X","--excludexy"),
+                                  action="store_false",
+                                  default=TRUE,
+                                  help="Exclude the X and Y chromosomes from segment output"),
 
                      make_option (c("-d","--debug"),
                                   action="store_true",
