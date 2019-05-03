@@ -78,7 +78,7 @@ synthetic_correctBias_allpossibility <- function(filename, syntheticLibrary, bin
     } else {
       centromere <- read.delim(centromereBins, header = F, stringsAsFactors = F)
     }
-    centromere[, 2] <- centromere[, 2] + 1
+    centromere[, 2] <- as.numeric(as.character( centromere[, 2])) + 1
     centromere.IDs <- paste0(centromere[, 1], ":", centromere[, 2])
     ratio.IDs <- paste0(ratio.res[, "chr"], ":", ratio.res[, "start"])
     ratio.res <- ratio.res[! ratio.IDs%in%centromere.IDs, ]
