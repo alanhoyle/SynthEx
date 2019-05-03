@@ -16,6 +16,13 @@ RUN R -q -e "install.packages(c('devtools', 'covr', 'roxygen2', 'testthat','optp
 rm -rf /tmp/*
 
 RUN Rscript -e ' install.packages("BiocManager", repos = "https://cloud.r-project.org/") ; BiocManager::install() ; BiocManager::install("DNAcopy")'
+
+# Docker isn't smart enough to know if something has changed in the github repository at build time.
+# To force Docker to build everything after the following line (ARG CACHEBUST=1),
+# build using the following command:
+#     docker build -t synthex --build-arg CACHEBUST=$(date +%s)
+
+ARG CACHEBUST=1
 RUN Rscript -e 'devtools::install_github("alanhoyle/SynthEx")'
 
 COPY Rprofile.site /etc/R/
