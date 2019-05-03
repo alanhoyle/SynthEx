@@ -52,6 +52,9 @@ option_list <- list (
                                   help="An RData file for the centromere annotations [default is based on hg19]"),
 
                      make_option (c("-X","--excludexy"),
+                                  # values stored here are the reverse of what might be expected:
+                                  # TRUE = include X and Y
+                                  # FALSE = exclude X and Y
                                   action="store_false",
                                   default=TRUE,
                                   help="Exclude the X and Y chromosomes from segment output"),
@@ -69,7 +72,9 @@ opt  <- parse_args(OptionParser(#usage= "usage: %prog [options]",
 
 bin.size <- opt$bin
 
-chrX <- opt$includexy
+
+# See --excludexy option above for explanation of T/F
+chrX <- opt$excludexy
 
 intersectBed.dir <- system("which intersectBed", intern=TRUE)
 
