@@ -48,12 +48,12 @@ WGS_normalization <- function(tumor.file, normal.file, bin.size = 100000, rm.cen
 
 
   ######### calculate MAF from VCF file #########
-  ff <- paste0("cat ", genotype.file, " | python ", vcf_to_bed, " ", cutoff, " 0.05  > ",
+  ff <- paste("zcat -f ", genotype.file, " | python ", vcf_to_bed, " ", cutoff, " 0.05  > ",
                file.path (working.dir, "tumor.MAF.highcut.bed"))
   system(ff)
 
   #Creates the intersect(using intersectBed) of MAF + adjusted bin ratios
-  ff <- paste0(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed"),
+  ff <- paste(bedTools.dir, "intersect"," -a ", file.path (working.dir, "tumor.MAF.highcut.bed"),
                " -b ", file.path (working.dir, "adjusted.ratio.bed"),
                " -wa -wb > ",  file.path (working.dir, "tumor.MAF.ratio.bed"))
   system(ff)

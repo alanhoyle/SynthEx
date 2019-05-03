@@ -76,9 +76,9 @@ bin.size <- opt$bin
 # See --excludexy option above for explanation of T/F
 chrX <- opt$excludexy
 
-intersectBed.dir <- system("which intersectBed", intern=TRUE)
+bedTools.dir <- system("which bedtools", intern=TRUE)
 
-if (is.null(intersectBed.dir)) stop ("Can't find intersectBed")
+if (is.null(bedTools.dir)) stop ("Can't find bedtools")
 
 datalist <- data()$results
 
@@ -196,7 +196,7 @@ system.time (Segfrompipe <- SynthExPipeline (
   tumor.file,
   normal.file,
   bin.size=bin.size,
-  intersectBed.dir,
+  bedTools.dir,
   genotype.file=genotype.file,
   result.dir,working.dir,
   prefix=sample.name,

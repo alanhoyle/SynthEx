@@ -20,11 +20,11 @@ normalization <- function(ratioCorrectedBias, bedTools.dir, genotype.file, vcf =
     ff <- paste("zcat -f", genotype.file, "| python", vcf_to_bed, cutoff, " 0.05  > ", file.path (working.dir, "tumor.MAF.highcut.bed"))
     system(ff)
     ######## Creates the intersect(using intersectBed) of MAF + adjusted bin ratios
-    ff <- paste(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed")," -b ", file.path (working.dir, "Ratio.bed"),
+    ff <- paste(bedTools.dir, "intersect"," -a ", file.path (working.dir, "tumor.MAF.highcut.bed")," -b ", file.path (working.dir, "Ratio.bed"),
                " -wa -wb > ",  file.path (working.dir, "tumor.MAF.ratio.bed"))
     system(ff)
   } else {
-    ff <- paste(bedTools.dir, " -a ", genotype.file, " -b ", file.path (working.dir, "Ratio.bed"),
+    ff <- paste(bedTools.dir,"intersect", " -a ", genotype.file, " -b ", file.path (working.dir, "Ratio.bed"),
                  " -wa -wb > ",  file.path (working.dir, "tumor.MAF.ratio.bed"))
     system(ff)
   }

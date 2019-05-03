@@ -10,6 +10,7 @@ RUN apt-get install -y libcurl4-openssl-dev  libssl-dev python zlib1g-dev
 ENV bedtools_version 2.28.0
 
 ADD https://github.com/arq5x/bedtools2/releases/download/v${bedtools_version}/bedtools /usr/local/bin
+RUN chmod 755 /usr/local/bin/bedtools
 
 RUN R -q -e "install.packages(c('devtools', 'covr', 'roxygen2', 'testthat','optparse','data.table'), repos = 'https://cloud.r-project.org/')" &&\
 rm -rf /tmp/*
