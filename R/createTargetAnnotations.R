@@ -35,7 +35,7 @@ createTargetAnnotations <- function(TargetBedFileName,
         createTargetBins(Target = NewTarget$Target, bin.size = binsize)
     }
 
-    if (!missing(savefile))
+    if (!is.null(savefile))
       {
         message ("   Saving to file:",savefile)
         TargetAnnotations <- NewTarget
