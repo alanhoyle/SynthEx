@@ -102,7 +102,7 @@ purityEstimate <- function(Segment, working.dir = NULL, result.dir = NULL,
     clustering <- data.frame(subsegRes, a.sample.cluster)
     write.table(clustering, file.path(working.dir, "clustering.bed"), col.names = F, row.names = F, sep = "\t", quote = F)
 
-    ff <- paste0(bedTools.dir, " -a ", file.path (working.dir, "tumor.MAF.highcut.bed"),
+    ff <- paste(bedTools.dir,"intersect", " -a ", file.path (working.dir, "tumor.MAF.highcut.bed"),
                  " -b ", file.path (working.dir, "clustering.bed"),
                  " -wa -wb > ",
                  file.path (working.dir, "tumor.MAF_clustering.bed"))
