@@ -37,7 +37,7 @@ createTargetAnnotations <- function(TargetBedFileName,
 
     if (!is.null(savefile))
       {
-        message ("   Saving to file:",savefile)
+        message ("   Saving to file: <",savefile,">")
         TargetAnnotations <- NewTarget
         save (TargetAnnotations, file = savefile)
       }

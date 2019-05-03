@@ -89,6 +89,8 @@ if (opt$annotation == "mm10") {
   }
 }
 
+
+
 if (opt$annotation == "") {
 
   if (opt$bed == "") {
@@ -97,8 +99,9 @@ if (opt$annotation == "") {
       TargetAnnotations = createTargetAnnotations(
         TargetBedFileName = opt$bed,
         genome = "unspecified",
-        description = "",
-        savefile = opt$saveann
+        bins = c(bin.size),
+        description = paste("bins for",opt$bed) #,
+#        savefile = opt$saveann
         )
 
   } else {
@@ -161,6 +164,10 @@ if(!file.exists (tumor.file)) {
 
 if(!file.exists (normal.file)) {
   stop("Can't find normal file: ",normal.file)
+}
+
+if(!is.null(genotype.file) && !file.exists (genotype.file)) {
+  stop("Can't find genoytpe file:", genotype.file)
 }
 
 if (is.null(eval (parse(text=paste0("TargetAnnotations$bin", bin.size))))) {
