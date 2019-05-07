@@ -206,5 +206,8 @@ system.time (Segfrompipe <- SynthExPipeline (
   )
 )
 
-message ("------Finished running SynthExPipeline------\n")
+
+
+message ("------Finished running SynthExPipeline------")
+message ("look for results in:", result.dir)
 
