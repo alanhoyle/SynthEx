@@ -51,6 +51,16 @@ option_list <- list (
                                   default="",
                                   help="An RData file for the centromere annotations [default is based on hg19]"),
 
+                     make_option (c("-S","syntheticLibrary"),
+                                  action="store_true",
+                                  default=FALSE,
+                                  help="Create Synthetic Library from the Normal samples"),
+
+                     make_option (c("-O","optimizeK"),
+                                  action="store_true",
+                                  default=FALSE,
+                                  help="optimize the value for K based on the data presented"),
+
                      make_option (c("-X","--excludexy"),
                                   # values stored here are the reverse of what might be expected:
                                   # TRUE = include X and Y
@@ -190,11 +200,19 @@ if (!("numchrom" %in% names(TargetAnnotations))) {
   warning("Can't find TargetAnnotations$numchrom.  Assuming human with default value of ",  TargetAnnotations$numchrom )
 }
 
+normal <- read.delim(normal.file , header = F, stringsAsFactors = F)
+
+if (opt$syntheticLibrary) {
+
+  message ("TODO:  syntheticLibrary creation HERE")
+  #normal <- create_synthetic_library(normal, foldEnrichment = , groupID = , interval = 50000000)
+}
+
 
 message ("------Running SynthExPipeline------")
 system.time (Segfrompipe <- SynthExPipeline (
   tumor.file,
-  normal.file,
+  normal,
   bin.size=bin.size,
   bedTools.dir,
   genotype.file=genotype.file,
@@ -202,7 +220,8 @@ system.time (Segfrompipe <- SynthExPipeline (
   prefix=sample.name,
   verbose=debug,
   chrX=chrX,
-  K=numnormals
+  K=numnormals,
+  optimizeK=opt$optimizeK
   )
 )
 

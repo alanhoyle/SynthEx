@@ -1,6 +1,7 @@
 SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file,
                             result.dir = NULL, working.dir = NULL, verbose = FALSE,
                             saveplot = TRUE, plotNormalized = TRUE,
+                            optimizeK = FALSE,
                             rm.centromere = TRUE, targetAnnotateBins = NULL, centromereBins = NULL, chrX = TRUE,
                             report = TRUE, plot = TRUE, prefix = NULL, reads.threshold = 25, vcf = TRUE,
                             adjust.cutoff = 1.2, seg.count = 200, segmentMethod = "CBS",
@@ -13,7 +14,7 @@ SynthExPipeline <- function(tumor, normal, bin.size, bedTools.dir, genotype.file
   ratioCorrectedBias <- SynthExcorrectBias(tumor, normal, bin.size = bin.size, rm.centromere = rm.centromere,
              targetAnnotateBins = targetAnnotateBins, saveplot = saveplot, centromereBins = centromereBins,
              chrX = chrX, plot = plot, result.dir = result.dir, working.dir = working.dir, K =K,
-             prefix = prefix, reads.threshold = reads.threshold,
+             prefix = prefix, reads.threshold = reads.threshold, optimizeK = optimizeK,
              verbose=verbose)
 
   if(verbose == TRUE) {

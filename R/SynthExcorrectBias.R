@@ -1,6 +1,7 @@
 SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere = TRUE, K = 1,
                              targetAnnotateBins = NULL, saveplot = FALSE, centromereBins = NULL, chrX = TRUE,
                              plot = TRUE, result.dir = NULL, working.dir = NULL, prefix = NULL, reads.threshold = 25,
+                             optimizeK=FALSE,
                              verbose=FALSE){
   options(scipen = 50)
   if(is.null(result.dir)) result.dir <- "result"
@@ -70,6 +71,9 @@ SynthExcorrectBias <- function(tumor, normal, bin.size = 100000, rm.centromere =
 
     if(ncol(normal) > 4){ # i.e. if there exists more than one sample in the BED-like normals matrix.
       if(K > 1){
+        if (optimizeK) {
+          message ("TODO: code to optmize value of K goes here")
+        }
         Corrected <- synthetic_correctBias_nearsamples(tumor, normal[, -c(1:3)], bin.size = bin.size, rm.centromere = rm.centromere, K = K,
                                                    targetAnnotateBins = targetAnnotateBins, saveplot = saveplot, centromereBins = centromereBins, chrX = chrX,
                                                     plot = plot, result.dir = result.dir, prefix = prefix, reads.threshold = reads.threshold)
