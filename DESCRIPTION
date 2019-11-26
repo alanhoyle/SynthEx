@@ -7,6 +7,6 @@ Author: Mengjie Chen
 Maintainer: Mengjie Chen <mengjiechen@uchicago.edu>
 Description: SynthEx is a comprehensive suite of tools for CNA detection and tumor heterogeneity profiling.
 License: GPL (>=2)
-LinkingTo: mclust, flsa, foreach, DNAcopy, ggplot2, gridExtra, inline, Rcpp
-Imports: mclust, flsa, foreach, DNAcopy, ggplot2, gridExtra, inline, Rcpp
-Suggests: optparse
+LinkingTo: mclust, flsa, foreach, DNAcopy, ggplot2, gridExtra, inline, Rcpp, optparse
+Imports: mclust, flsa, foreach, DNAcopy, ggplot2, gridExtra, inline, Rcpp, optparse
+Suggests: 
