@@ -51,12 +51,12 @@ option_list <- list (
                                   default="",
                                   help="An RData file for the centromere annotations [default is based on hg19]"),
 
-                     make_option (c("-S","syntheticLibrary"),
+                     make_option (c("-S","--syntheticLibrary"),
                                   action="store_true",
                                   default=FALSE,
                                   help="Create Synthetic Library from the Normal samples"),
 
-                     make_option (c("-O","optimizeK"),
+                     make_option (c("-O","--optimizeK"),
                                   action="store_true",
                                   default=FALSE,
                                   help="optimize the value for K based on the data presented"),
